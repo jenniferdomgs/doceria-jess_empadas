@@ -1,0 +1,466 @@
+* {
+    margin: 0%;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'montserrat-bold';
+    src: url(../static/fontes/Montserrat-Bold.otf);
+}
+@font-face {
+    font-family: 'montserrat-regular';
+    src: url(../static/fontes/Montserrat-Regular.otf);
+}
+
+body {
+    background-color: #FFEFC6;
+}
+
+header {
+    position: sticky;
+    top: 0%;
+}
+
+#inverte {
+    display: flex;
+    gap: 90px;
+    align-items: center;
+}
+
+
+nav {
+    display: flex;
+    background-color: #F2BE7E;
+    width: auto;
+    height: 100px;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 35px;
+    font-family: 'montserrat-regular';
+}
+
+#logo {
+    height: 90px;
+}
+
+#F {
+    display: flex;
+    gap: 20px;
+}
+
+form > button {
+    border: none;
+    background-color: #F2BE7E;
+    color: #674228;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.bH {
+    border: none;
+    color: #674228;
+    transition: 0.3s;
+}
+
+.bH > a:hover {
+    opacity: 0.7;
+}
+
+#burguer {
+    background-color: #FFDDA7;
+    color: #674228;
+    text-align: center;
+    padding: 10px;
+    display: block;
+    cursor: pointer;
+}
+
+#burguer:hover {
+    background-color: #674228;
+    color: #FFDDA7;
+}
+
+.menu {
+    display: none;
+    font-size: 25px;
+    padding: 10px;
+}
+
+
+#itens > a {
+    text-decoration: none;
+    color: #674228;
+    transition: 0.3s;
+}
+
+#itens > a:hover {
+    opacity: 0.7;
+}
+
+#itens {
+    display: flex;
+    gap: 20px;
+}
+
+#ig {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+#simbIG {
+    display: flex;
+    height: 35px;
+    width: 35px;
+    border-radius: 100%;
+    background-color: #674228d8;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+}
+
+
+main {
+    width: 100%;
+    padding: 20px;
+}
+
+#hero {
+    width: 100%;
+    height: 350px;
+    background-image: url(../static/img/hero1.jpg);
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 30px;
+}
+
+section h2 {
+    font-family: 'montserrat-bold';
+    color: #674228;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.card-produto {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.card-produto:hover {
+    transform: translateY(-5px);
+}
+
+.card-imgP {
+    width: 100%;
+    height: 180px;
+    background-color: #FFDDA7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.card-imgP img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.nomeP {
+    padding: 10px;
+    text-align: center;
+    font-family: 'montserrat-regular';
+    color: #674228;
+}
+
+.destaque {
+    border: 2px solid #FFDDA7;
+}
+
+#entreFeS {
+    width: 100%;
+    height: 30px;
+    background-color: #674228;
+}
+
+.logout-btn {
+    color: #674228;
+    font-size: 20px;
+    margin-right: 10px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.logout-btn:hover {
+    color: #FFDDA7;
+}
+
+
+@media screen and (min-width: 768px) {
+    #burguer {
+        display: none;
+    }
+    .menu {
+        display: inline-block;
+        padding-right: 4px;
+    }
+
+}
+
+@media screen and (max-width: 768px) {
+    #overlay {
+        display: none;
+        position: fixed;
+        top: 0%;
+        left: -0%;
+        width: 350px;
+        height: 100%;
+        background-color: #674228cb;
+        z-index: 1;
+    }
+    #itens {
+        padding-top: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+    #itens > a {
+        text-decoration: none;
+        color: #FFDDA7;
+        transition: 0.3s;
+    }
+
+    #logo {
+        padding-right: 5px;
+    }
+    nav {
+        height: auto;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    #logo {
+        height: 50px;
+        margin: 0px;
+    }
+    input {
+        width: 220px;
+        height: 25px;
+    }
+
+
+    #inverte {
+        flex-direction: row-reverse;
+        gap: 10px;
+        padding-left: 20px;
+
+    }
+
+    #burguer {
+        font-size: 20px;
+    }
+    .footer-content {
+        margin: 0%;
+        gap: 15px;
+    }
+    #simbIG {
+        background-color: #FFDDA7;
+        color: #674228;
+    }
+    #simbIG > i {
+        font-size: 20px;
+    }
+    .title {
+        font-size: 15px;
+    }
+    #IG {
+        gap: 0px;
+    }
+    .info {
+        font-size: 10px;
+    }
+    .contact-info {
+        margin: 10px;
+    }
+    #logoF {
+        height: 50px;
+    }
+    .sobretexto {
+        margin: 10px;
+    }
+    .sobretexto > h3 {
+        font-size: 15px;
+    }
+    .sobretexto > p, ul{
+        font-size: 10px;
+    }
+    #entreFeS {
+        height: 15px;
+    }
+    #hero {
+        height: 200px;
+        background-image: url(../static/img/heroM.png);
+    }
+    .card-imgP {
+        width: 150px;
+        height: 175px;
+
+    }
+    #produtos {
+        gap: 15px;
+    }
+    .nomeP {
+        width: 120px;
+    }
+}
+
+
+footer {
+    align-items: center;
+    color: #674228;
+}
+    
+.footer-content {
+    background-color: #FFDDA7;
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#logoF {
+    height: 150px;
+}
+    
+.contact-info p {
+    margin: 5px 0;
+    color: #674228;
+}
+
+
+.info {
+    font-family: 'montserrat-regular';
+    padding-bottom: 10px;
+}
+
+.title {
+    font-family: 'montserrat-bold';
+}
+
+#sobre {
+    color: #674228;
+    display: flex;
+    align-items: center;
+    justify-content:space-around;
+    background-color: #F2BE7E;
+    width: 100%;
+    height: 220px;
+}
+
+
+.sobretexto {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color:#674228;
+    width: 300px;
+    text-align: center;
+    font-family: 'montserrat-regular';
+
+
+}
+
+#listaS  {
+    list-style-type: none;
+}
+
+.contact-info {
+    display: flex;
+    width: 500px;
+    justify-content: space-between;
+}
+
+#produtos {
+    width: 100%;
+    display: flex;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+    gap: 50px;
+    position: relative; 
+}
+
+.card-produto {
+    position: relative; 
+}
+
+.card-imgP {
+    position: relative; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px; 
+    height: 200px; 
+    background-color: #674228;
+    z-index: 0;
+    margin-top: 25px;
+    overflow: hidden; 
+}
+
+.card-imgP > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.nomeP {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: white;
+    color: #674228;
+    width: 100%; 
+    padding: 5px; 
+    text-align: center; 
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    border: 1px solid #674228; 
+    border-radius: 25px;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    width: 300px; 
+}
+
+.search-form input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 25px 0 0 25px;
+}
+
+.search-form button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 10px;
+    color:#674228; 
+    font-size: 16px;
+}

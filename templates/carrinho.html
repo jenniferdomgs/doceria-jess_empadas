@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jess empadas #Carrinho</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/carrinho.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
+</head>
+
+<body>
+    <button class="homeButton" onclick="redirectToHome()"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="cart-container">
+      <h2>Seu Carrinho</h2>
+  
+      <ul class="cart-list">
+        <!-- Item 1 no carrinho -->
+        <li>
+          <input type="checkbox" id="product1" name="product1">
+
+          <div class="product-details">
+            <div class="img-produto">
+                <img src="" alt="imagem do produto">
+            </div>
+
+                <div class="info">
+              <p class="p-infos">Nome do Produto</p>
+              <p class="p-infos">Valor: R$</p>
+              <p class="p-infos">Quantidade:</p>
+            </div>
+          </div>
+
+        </li>
+
+
+      </ul>
+      <hr>
+      
+      <div class="cart-summary">
+        <p class="p-total">Subtotal: R$</p>
+        <p class="p-total">Total: R$</p>
+        <button class="choose-payment-btn">Escolher Forma de Pagamento</button>
+      </div>
+    </div>
+    <script>
+      function redirectToHome() {
+          window.location.href = "/";
+      }
+  </script>
+  </body>
+  </html>

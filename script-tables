@@ -1,0 +1,97 @@
+-- Tabela fornecedor
+CREATE TABLE fornecedor (
+    cnpj VARCHAR(18) PRIMARY KEY,
+    nome VARCHAR(200) NOT NULL,
+    email VARCHAR(200) NOT NULL,
+    senha VARCHAR(256) NOT NULL,
+    telefone VARCHAR(13)
+);
+
+-- Tabela usuario
+CREATE TABLE usuario (
+    cpf VARCHAR(14) PRIMARY KEY,
+    nome VARCHAR(200) NOT NULL,
+    email VARCHAR(200) NOT NULL,
+    senha VARCHAR(256) NOT NULL,
+    telefone VARCHAR(13),
+    urlImagem VARCHAR(256)
+);
+
+-- Tabela compra
+CREATE TABLE compra (
+    codcompra SERIAL PRIMARY KEY,
+    valor DECIMAL(10,2) NOT NULL,
+    cpfUsuario VARCHAR(14) NOT NULL,
+    datacompra DATE NOT NULL,
+    quantidade INT NOT NULL,
+    CONSTRAINT fk_usuario_compra FOREIGN KEY (cpfUsuario) REFERENCES usuario(cpf)
+);
+
+-- Tabela categoria
+CREATE TABLE categoria (
+    nome VARCHAR(200) PRIMARY KEY,
+    descricao TEXT
+);
+
+-- Tabela produto
+CREATE TABLE produto (
+    codproduto SERIAL PRIMARY KEY,
+    lote VARCHAR(200),
+    vencimento DATE NOT NULL,
+    quantidade INT NOT NULL,
+    valor DECIMAL(10,2) NOT NULL,
+    nomeCategoria VARCHAR(200) NOT NULL,
+    descricao TEXT,
+    nome VARCHAR(200) NOT NULL,
+    cnpjFornecedor VARCHAR(18) NOT NULL,
+    CONSTRAINT fk_produto_categoria FOREIGN KEY (nomeCategoria) REFERENCES categoria(nome),
+    CONSTRAINT fk_produto_fornecedor FOREIGN KEY (cnpjFornecedor) REFERENCES fornecedor(cnpj)
+);
+
+-- Tabela carrinho
+CREATE TABLE carrinho (
+    carrinhoID SERIAL PRIMARY KEY,
+    cpfUsuario VARCHAR(14) NOT NULL,
+    codProduto INT NOT NULL,
+    quantidade INT NOT NULL,
+    codCompra INT NOT NULL,
+    CONSTRAINT fk_carrinho_usuario FOREIGN KEY (cpfUsuario) REFERENCES usuario(cpf),
+    CONSTRAINT fk_carrinho_produto FOREIGN KEY (codProduto) REFERENCES produto(codproduto),
+    CONSTRAINT fk_carrinho_compra FOREIGN KEY (codCompra) REFERENCES compra(codcompra)
+);
+
+-- Tabela imagem
+CREATE TABLE imagem (
+    imagemID SERIAL PRIMARY KEY,
+    codProduto INT NOT NULL,
+    urlImagem VARCHAR(256) NOT NULL,
+    CONSTRAINT fk_imagem_produto FOREIGN KEY (codProduto) REFERENCES produto(codproduto)
+);
+
+-- Tabela enderecoUsuario
+CREATE TABLE enderecoUsuario (
+    cpfUsuario VARCHAR(14) NOT NULL,
+    rua VARCHAR(400) NOT NULL,
+    numero INT NOT NULL,
+    bairro VARCHAR(100) NOT NULL,
+    cidade VARCHAR(100) NOT NULL,
+    estado VARCHAR(2) NOT NULL,
+    pais VARCHAR(100),
+    CONSTRAINT fk_endereco_usuario FOREIGN KEY (cpfUsuario) REFERENCES usuario(cpf)
+);
+
+-- Tabela enderecoFornecedor
+CREATE TABLE enderecoFornecedor (
+    cnpjFornecedor VARCHAR(18) NOT NULL,
+    rua VARCHAR(400) NOT NULL,
+    numero INT NOT NULL,
+    bairro VARCHAR(100) NOT NULL,
+    cidade VARCHAR(100) NOT NULL,
+    estado VARCHAR(2) NOT NULL,
+    pais VARCHAR(100),
+    CONSTRAINT fk_endereco_fornecedor FOREIGN KEY (cnpjFornecedor) REFERENCES fornecedor(cnpj)
+);
+
+
+
+

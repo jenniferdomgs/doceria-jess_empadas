@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jess Empadas #Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
+</head>
+<body>
+    <div class="containerL">
+        <button class="homeButton" onclick="redirectToHome()"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="login">
+            <img src="{{ url_for('static', filename='img/loginM.png') }}">
+            <h1>LOGIN</h1>
+            <div class="form-login">
+                {% if error %}
+                <div style="background-color: #f8d7da; color: #842029; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                <form action="/login" method="POST">
+                    <fieldset>
+                        <label for="login">Email, CPF ou CNPJ:</label>
+                        <input type="text" id="login" name="login" placeholder=" Insira Email, CPF ou CNPJ" required>
+                    </fieldset>
+                    <fieldset>
+                        <label id="s" for="senha">Senha:</label>
+                        <input type="password" id="senha" name="senha" placeholder=" Insira sua Senha" required>
+                    </fieldset>
+                    <button class="entrar" id="entrar" type="submit"><h3>Entrar</h3></button>
+                    <button class="loginB" id="cadastrar" type="button" onclick="redirecionarCadastro()">
+                        <p>Cadastre-se</p>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function redirectToHome() {
+            window.location.href = "/";
+        }
+
+        function redirecionarCadastro() {
+            window.location.href = "/cadastro"; 
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jess Empadas #Cadastro Fornecedor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastroU.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
+</head>
+<body>
+    <div class="container1">
+        <button class="homeButton" onclick="redirectToHome()"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="cadastro">
+            <h1>CADASTRO FORNECEDOR</h1>
+            <img src="{{ url_for('static', filename='img/cadastroM.png') }}">
+            <div class="form-cadastro">
+                <form action="/cadastroADM" method="POST">
+                    <fieldset>
+                        <label for="cnpj">CNPJ:</label>
+                        <input type="text" id="cnpj" name="cnpj" placeholder="Insira seu CNPJ" required>
+                    </fieldset>
+                    <fieldset>
+                        <label for="nome">Nome da empresa:</label>
+                        <input type="text" id="nome" name="nome" placeholder="Insira o nome da empresa" required>
+                    </fieldset>
+                    <fieldset>
+                        <label for="email">Email:</label>
+                        <input type="text" id="email" name="email" placeholder="Insira seu email" required>
+                    </fieldset>
+                    <fieldset>
+                        <label for="telefone">Número de telefone:</label>
+                        <input type="text" id="telefone" name="telefone" placeholder="Insira seu número de telefone" required>
+                    </fieldset>
+                    <fieldset>
+                        <label for="senha">Senha:</label>
+                        <input type="password" id="senha" name="senha" placeholder="Crie uma senha" required>
+                    </fieldset>
+                    <fieldset>
+                        <button class="cadastrar" id="cadastrar" type="submit"><h3>Criar conta</h3></button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function redirectToHome() {
+            window.location.href = "/";
+        }
+    </script>
+</body>
+</html>

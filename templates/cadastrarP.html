@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jess empadas #fornecedor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastrarP.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <form id="formCadastro" method="POST" action="{{ url_for('cadastrarP') }}" enctype="multipart/form-data">
+        <h2>Cadastro de Produto</h2>
+
+        <label for="cnpj">CNPJ:</label>
+        <input type="text" id="cnpj" name="cnpj" required>
+
+        <label for="categoria">Categoria do produto:</label>
+        <select id="categoria" name="categoria" required>
+            {% if categorias %}
+                {% for categoria in categorias %}
+                    <option value="{{ categoria }}">{{ categoria }}</option>
+                {% endfor %}
+            {% else %}
+                <option value="">Nenhuma categoria cadastrada</option>
+            {% endif %}
+        </select>
+
+        <label for="nome">Nome do Produto:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="codproduto">Código do Produto:</label>
+        <input type="text" id="codproduto" name="codproduto" required>
+
+        <label for="descricao">Descrição do Produto:</label>
+        <textarea id="descricao" name="descricao" rows="4" required></textarea>
+        
+        <label for="lote">Lote:</label>
+        <input type="text" id="lote" name="lote" required>
+
+        <label for="vencimento">Vencimento:</label>
+        <input type="date" id="vencimento" name="vencimento" required>
+
+        <label for="quantidade">Quantidade:</label>
+        <input type="number" id="quantidade" name="quantidade" required>
+    
+        <label for="valor">Valor:</label>
+        <input type="number" id="valor" name="valor" step="0.01" required>
+
+        <label for="img">Imagem do Produto:</label>
+        <input type="file" id="img" name="img" required accept="image/*">
+
+        <button type="submit">Cadastrar Produto</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('formCadastro').onsubmit = function(event) {
+        event.preventDefault(); // não enviar o form imediatamente 
+
+        fetch(this.action, {
+            method: this.method,
+            body: new FormData(this)
+        }).then(response => {
+            if (response.redirected) {
+                alert("Produto cadastrado com sucesso!");
+                window.location.href = response.url;
+            } else {
+                alert("Erro ao cadastrar o produto!");
+            }
+        }).catch(error => {
+            alert("Erro ao processar a solicitação.");
+            console.error(error);
+        });
+    };
+</script>
+
+</body>
+</html>

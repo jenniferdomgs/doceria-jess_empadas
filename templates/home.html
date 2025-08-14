@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jess Empadas #home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <img id="logo" src="../static/img/logo.png">
+            <div id="P">
+                <form method="GET" action="{{ url_for('home') }}" class="search-form">
+                    <input type="text" name="q" placeholder="Pesquisa..." value="{{ termo_pesquisa or '' }}">
+                    <button type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>                           
+            <div id="inverte">
+                <i id="burguer" onclick="clickMenu()"><i class="fa-solid fa-bars"></i></i>
+                <div id="overlay" >
+                    <div id="itens" class="menu">
+                        <a href="#" onclick="clickMenu()">Home</a>
+                        <a href="#produtos" onclick="clickMenu()">Produtos</a>
+                        <a href="#sobre" onclick="clickMenu()">Sobre</a>
+                        <a href="#footer" onclick="clickMenu()">Contato</a>
+                    </div> 
+                </div>
+                <div id="F">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('logout') }}" class="logout-btn" title="Sair">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </a>
+                    {% else %}
+                        <form method="GET" action="{{ url_for('login') }}">
+                            <button type="submit" name="user" title="Login">
+                                <i class="fa-solid fa-user"></i>
+                            </button> 
+                        </form>
+                    {% endif %}
+                    
+                    <form method="POST" action="{{ url_for('carrinho') }}">
+                        <button type="submit" name="carrinho" title="Carrinho">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </button>
+                    </form>
+                </div>                
+            </div>
+        </nav>
+    </header>
+
+    <script>
+        function clickMenu() {
+            var overlaay = document.getElementById('overlay');
+            var itens = document.getElementById('itens');
+            if (overlaay.style.display == 'block') {
+                overlaay.style.display = "none";
+                itens.style.display = 'block';
+            } else {
+                overlaay.style.display = "block";
+            }
+        }
+    </script>
+    
+    <main>
+        <section id="hero"></section>
+
+        <section id="destaques">
+            <h2>Mais Vendidos</h2>
+            <div class="produtos-grid">
+                {% for produto in mais_vendidos %}
+                <div class="card-produto destaque">
+                    <div class="card-imgP">
+                        <img src="{{ produto[1] }}" alt="{{ produto[0] }}">
+                    </div>
+                    <div class="nomeP">{{ produto[0] }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% if termo_pesquisa %}
+            <h2>Resultados para "{{ termo_pesquisa }}":</h2>
+            {% if produtos|length == 0 %}
+                <p>Nenhum produto encontrado.</p>
+            {% endif %}
+        {% endif %}
+
+
+        <section id="produtos">
+            {% for produto in produtos %}
+            <div class="card-produto">
+                <div class="card-imgP">
+                    <img src="{{ produto[1] }}" alt="{{ produto[0] }}">
+                    <div class="nomeP">
+                        <p>{{ produto[0] }}</p>
+                    </div>
+                </div>
+            </div>            
+            {% endfor %}
+        </section>
+        
+        {% if tipo_usuario == 'fornecedor' %}
+            <a href="{{ url_for('cadastrarP') }}" class="botao-cadastro">Cadastrar Produto</a>
+        {% endif %}
+       
+    </main>
+    
+    <footer id="footer">
+        <section id="sobre">
+            <div class="sobretexto">
+                <h3>Missão</h3>
+                <p>Oferecer produtos exclusivos para toda e qualquer celebração da vida. Os produtos são artesanais que unem beleza e sabor.</p>
+            </div>
+            <div class="sobretexto">
+                <h3>Visão</h3>
+                <p>Proporcionar um portfólio diverso, oferecendo experiências que lhe tragam memórias afetivas.</p>
+            </div>
+            <div class="sobretexto">
+                <h3>Valores</h3>
+                <ul id="listaS">
+                    <li>Valorização do ser humano com respeito e ética;</li>
+                    <li>Oferecer um portfólio de produtos de qualidade que se tornem tendências;</li>
+                    <li>Inovar para encantar, sempre!</li>
+                </ul>
+            </div>
+        </section>
+        <div class="footer-content">
+            <img id="logoF" src="../static/img/logo.png" alt="Logo da Sua Empresa">
+            <div class="contact-info">
+                <div>
+                    <h3 class="title">Contato</h3>
+                    <p class="info">Delivery e Eventos:</p>
+                    <p class="info">(84) 98859-6694</p>
+                </div>
+                <div id="ig">
+                    <div id="simbIG">
+                        <i class="fa-brands fa-instagram"></i>
+                    </div>
+                    <div>
+                        <h4 class="title">@jess.empadas</h4>
+                        <p class="info">Desde 2023 © Jess Empadas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer> 
+</body>
+</html>
