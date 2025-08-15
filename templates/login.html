@@ -8,11 +8,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
 </head>
 <body>
+    <button class="homeButton" onclick="redirectToHome()"><i class="fa-solid fa-arrow-left"></i></button>
     <div class="containerL">
-        <button class="homeButton" onclick="redirectToHome()"><i class="fa-solid fa-arrow-left"></i></button>
         <div class="login">
             <img src="{{ url_for('static', filename='img/loginM.png') }}">
-            <h1>LOGIN</h1>
             <div class="form-login">
                 {% if error %}
                 <div style="background-color: #f8d7da; color: #842029; padding: 10px; border-radius: 5px; margin-bottom: 15px;">

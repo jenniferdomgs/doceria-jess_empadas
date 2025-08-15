@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,144 +8,264 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
 </head>
 <body>
-    <header>
-        <nav>
-            <img id="logo" src="../static/img/logo.png">
-            <div id="P">
-                <form method="GET" action="{{ url_for('home') }}" class="search-form">
-                    <input type="text" name="q" placeholder="Pesquisa..." value="{{ termo_pesquisa or '' }}">
-                    <button type="submit">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+<header>
+    <nav>
+        <img id="logo" src="../static/img/logo.png">
+        <div id="P">
+            <form method="GET" action="{{ url_for('home') }}" class="search-form">
+                <input type="text" name="q" placeholder="Pesquisa..." value="{{ termo_pesquisa or '' }}">
+                <button type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>                           
+        <div id="inverte">
+            <i id="burguer" onclick="clickMenu()"><i class="fa-solid fa-bars"></i></i>
+            <div id="overlay" >
+                <div id="itens" class="menu">
+                    <a href="#" onclick="clickMenu()">Home</a>
+                    <a href="#produtos" onclick="clickMenu()">Produtos</a>
+                    <a href="#sobre-loja" onclick="clickMenu()">Sobre</a>
+                    <a href="#footer" onclick="clickMenu()">Contato</a>
+                </div> 
+            </div>
+            <div id="F">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('logout') }}" class="logout-btn" title="Sair">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </a>
+                {% else %}
+                    <form method="GET" action="{{ url_for('login') }}">
+                        <button type="submit" name="user" title="Login">
+                            <i class="fa-solid fa-user"></i>
+                        </button> 
+                    </form>
+                {% endif %}
+                
+                <form method="POST" action="{{ url_for('carrinho') }}">
+                    <button type="submit" name="carrinho" title="Carrinho">
+                        <i class="fa-solid fa-cart-shopping"></i>
                     </button>
                 </form>
-            </div>                           
-            <div id="inverte">
-                <i id="burguer" onclick="clickMenu()"><i class="fa-solid fa-bars"></i></i>
-                <div id="overlay" >
-                    <div id="itens" class="menu">
-                        <a href="#" onclick="clickMenu()">Home</a>
-                        <a href="#produtos" onclick="clickMenu()">Produtos</a>
-                        <a href="#sobre" onclick="clickMenu()">Sobre</a>
-                        <a href="#footer" onclick="clickMenu()">Contato</a>
-                    </div> 
-                </div>
-                <div id="F">
-                    {% if current_user.is_authenticated %}
-                        <a href="{{ url_for('logout') }}" class="logout-btn" title="Sair">
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                        </a>
-                    {% else %}
-                        <form method="GET" action="{{ url_for('login') }}">
-                            <button type="submit" name="user" title="Login">
-                                <i class="fa-solid fa-user"></i>
-                            </button> 
-                        </form>
-                    {% endif %}
-                    
-                    <form method="POST" action="{{ url_for('carrinho') }}">
-                        <button type="submit" name="carrinho" title="Carrinho">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                        </button>
-                    </form>
-                </div>                
-            </div>
-        </nav>
-    </header>
+            </div>                
+        </div>
+    </nav>
+</header>
 
-    <script>
-        function clickMenu() {
-            var overlaay = document.getElementById('overlay');
-            var itens = document.getElementById('itens');
-            if (overlaay.style.display == 'block') {
-                overlaay.style.display = "none";
-                itens.style.display = 'block';
-            } else {
-                overlaay.style.display = "block";
-            }
-        }
-    </script>
-    
-    <main>
-        <section id="hero"></section>
+<script>
+function clickMenu() {
+    var overlay = document.getElementById('overlay');
+    var itens = document.getElementById('itens');
+    if (overlay.style.display == 'block') {
+        overlay.style.display = "none";
+        itens.style.display = 'block';
+    } else {
+        overlay.style.display = "block";
+    }
+}
+</script>
 
-        <section id="destaques">
-            <h2>Mais Vendidos</h2>
-            <div class="produtos-grid">
-                {% for produto in mais_vendidos %}
-                <div class="card-produto destaque">
-                    <div class="card-imgP">
-                        <img src="{{ produto[1] }}" alt="{{ produto[0] }}">
-                    </div>
-                    <div class="nomeP">{{ produto[0] }}</div>
-                </div>
-                {% endfor %}
-            </div>
-        </section>
-        {% if termo_pesquisa %}
-            <h2>Resultados para "{{ termo_pesquisa }}":</h2>
-            {% if produtos|length == 0 %}
-                <p>Nenhum produto encontrado.</p>
-            {% endif %}
-        {% endif %}
+<main>
+    <section id="hero">
+        <div class="hero-content">
+            <h1>Jess Empadas</h1>
+            <p>Transformando cada dia em um momento doce!</p>
+            <a href="#produtos" class="btn-hero">Ver Produtos</a>
+        </div>
+    </section>
 
-
-        <section id="produtos">
-            {% for produto in produtos %}
-            <div class="card-produto">
+    <section id="destaques">
+        <h2>Mais Vendidos</h2>
+        <div class="produtos-grid">
+            {% for produto in mais_vendidos %}
+            <a href="javascript:void(0)" class="card-produto destaque" data-product
+               data-id="{{ produto[2] }}"
+               data-name="{{ produto[0] }}"
+               data-image="{{ produto[1] }}"
+               data-price="{{ produto[3]|default('', true) }}"
+               data-desc="{{ produto[4]|default('', true) }}">
                 <div class="card-imgP">
                     <img src="{{ produto[1] }}" alt="{{ produto[0] }}">
-                    <div class="nomeP">
-                        <p>{{ produto[0] }}</p>
-                    </div>
                 </div>
-            </div>            
+                <div class="nomeP">{{ produto[0] }}</div>
+            </a>
             {% endfor %}
-        </section>
-        
-        {% if tipo_usuario == 'fornecedor' %}
-            <a href="{{ url_for('cadastrarP') }}" class="botao-cadastro">Cadastrar Produto</a>
+        </div>              
+    </section>
+
+    {% if termo_pesquisa %}
+        <h2>Resultados para "{{ termo_pesquisa }}":</h2>
+        {% if produtos|length == 0 %}
+            <p>Nenhum produto encontrado.</p>
         {% endif %}
-       
-    </main>
-    
-    <footer id="footer">
-        <section id="sobre">
-            <div class="sobretexto">
-                <h3>Missão</h3>
-                <p>Oferecer produtos exclusivos para toda e qualquer celebração da vida. Os produtos são artesanais que unem beleza e sabor.</p>
+    {% endif %}
+
+    <section id="produtos">
+        {% for produto in produtos %}
+        <a href="javascript:void(0)" class="card-produto" data-product
+           data-id="{{ produto[2] }}"
+           data-name="{{ produto[0] }}"
+           data-image="{{ produto[1] }}"
+           data-price="{{ produto[3]|default('', true) }}"
+           data-desc="{{ produto[4]|default('', true) }}">
+            <div class="card-imgP">
+                <img src="{{ produto[1] }}" alt="{{ produto[0] }}">
+                <div class="nomeP"><p>{{ produto[0] }}</p></div>
             </div>
-            <div class="sobretexto">
-                <h3>Visão</h3>
-                <p>Proporcionar um portfólio diverso, oferecendo experiências que lhe tragam memórias afetivas.</p>
-            </div>
-            <div class="sobretexto">
-                <h3>Valores</h3>
-                <ul id="listaS">
-                    <li>Valorização do ser humano com respeito e ética;</li>
-                    <li>Oferecer um portfólio de produtos de qualidade que se tornem tendências;</li>
-                    <li>Inovar para encantar, sempre!</li>
-                </ul>
-            </div>
-        </section>
-        <div class="footer-content">
-            <img id="logoF" src="../static/img/logo.png" alt="Logo da Sua Empresa">
-            <div class="contact-info">
-                <div>
-                    <h3 class="title">Contato</h3>
-                    <p class="info">Delivery e Eventos:</p>
-                    <p class="info">(84) 98859-6694</p>
+        </a>
+        {% endfor %}
+    </section>
+
+    {% if tipo_usuario == 'fornecedor' %}
+        <a href="{{ url_for('cadastrarP') }}" class="botao-cadastro">Cadastrar Produto</a>
+    {% endif %}
+
+    <section id="sobre-loja">
+        <div class="sobre-imagem-grande">
+            <img src="../static/img/jess1.png" alt="Dona da Jess Empadas">
+        </div>
+        <div class="sobre-conteudo">
+            <h2>Como Surgimos?</h2>
+            <p> A "Jess Empadas" começou em julho de 2023, no IFCM, onde vendi minhas primeiras empadas doces tradicionais. Mas, a história desse sonho começou bem antes. Desde muito nova, eu era apaixonada por fazer doces. Com 14 anos esse desejo plantou-se em meu coração mas, acabei deixando-o de lado... O desejo de ter uma renda fazendo algo que amava crescia, mas a insegurança e o medo me impediam, mesmo com o apoio da minha família.</p>
+            <p> Quatro anos depois, fiz empadas doces para minha amiga que já trabalhava com doces. Ela adorou e disse: <strong>"Você precisa vender isso!".</strong> Contei a ela sobre os meus medos e, ela se ofereceu para me ajudar a vender. No dia seguinte, ela me pegou pela mão e, em menos de 30 minutos, vendemos tudo. <strong>Esse momento foi crucial para vencer o medo e perseguir meu sonho. </strong></p>
+            <p>Aqui estou, dando continuidade a esse sonho, que cada vez vem tomando mais forma. Tenho aprendido com a "Jess Empadas" que ter coragem para ir adiante, mesmo com medo, pode resultar em algo lindo e gratificante.</p>
+            <div class="sobre-cards">
+                <div class="card-sobre">
+                    <img src="../static/img/card1.jpg" alt="produção">
+                    <p>Primeira fornada de empadas</p>
                 </div>
-                <div id="ig">
-                    <div id="simbIG">
-                        <i class="fa-brands fa-instagram"></i>
-                    </div>
-                    <div>
-                        <h4 class="title">@jess.empadas</h4>
-                        <p class="info">Desde 2023 © Jess Empadas</p>
-                    </div>
+                <div class="card-sobre">
+                    <img src="../static/img/card2.jpg" alt="Jess e amiga">
+                    <p>Jess & Kelly</p>
+                </div>
+                <div class="card-sobre">
+                    <img src="../static/img/card3.jpg" alt="primeira encomenda">
+                    <p>Primeira Encomenda para festa</p>
                 </div>
             </div>
         </div>
-    </footer> 
+    </section>
+</main>
+
+<footer id="footer">
+    <div class="footer-content">
+        <img id="logoF" src="../static/img/logo.png" alt="Logo da Sua Empresa">
+        <div class="contact-info">
+            <div>
+                <h3 class="title">Contato</h3>
+                <p class="info">Delivery e Eventos:</p>
+                <p class="info">(84) 98859-6694</p>
+            </div>
+            <div id="ig">
+                <div id="simbIG">
+                    <a href="https://www.instagram.com/jess.empadas/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+                <div>
+                    <h4 class="title">@jess.empadas</h4>
+                    <p class="info">Desde 2023 © Jess Empadas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- MODAL PRODUTO -->
+<div class="modal-overlay" id="productModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal" role="document">
+        <div class="modal-header">
+            <h2 class="modal-title">Produto</h2>
+            <button class="modal-close" aria-label="Fechar">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="img-wrap">
+                <img src="" alt="" class="modal-img">
+            </div>
+            <div class="modal-info">
+                <h3 class="modal-name"></h3>
+                <hr>
+                <ul class="modal-desc"></ul>
+                <p class="modal-price"></p>
+                <form action="{{ url_for('carrinho') }}" method="POST" class="modal-cart">
+                    <input type="hidden" name="produto_id" value="">
+                    <button type="submit" class="btn-add-cart">
+                        <i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const overlay = document.getElementById('productModal');
+    const closeBtn = overlay.querySelector('.modal-close');
+    const titleEl = overlay.querySelector('.modal-title');
+    const nameEl  = overlay.querySelector('.modal-name');
+    const imgEl   = overlay.querySelector('.modal-img');
+    const descEl  = overlay.querySelector('.modal-desc');
+    const priceEl = overlay.querySelector('.modal-price');
+    const cartForm = overlay.querySelector('.modal-cart');
+    const idInput  = cartForm.querySelector('input[name="produto_id"]');
+
+    function parseDesc(raw) {
+        if (!raw) return [];
+        try {
+            const j = JSON.parse(raw);
+            if (Array.isArray(j)) return j;
+        } catch(e){}
+        return String(raw).split('||').map(s => s.trim()).filter(Boolean);
+    }
+
+    function openModal(data){
+        const { id='', name='Produto', image='', price='', desc='' } = data;
+        titleEl.textContent = 'Detalhes do Produto';
+        nameEl.textContent = name;
+        imgEl.src = image || '';
+        imgEl.alt = name;
+
+        descEl.innerHTML = '';
+        const itens = parseDesc(desc);
+        if (itens.length){
+            itens.forEach(t => {
+                const li = document.createElement('li');
+                li.textContent = t;
+                descEl.appendChild(li);
+            });
+        }
+
+        priceEl.textContent = price ? `R$ ${price}` : '';
+        idInput.value = id || '';
+
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+        closeBtn.focus();
+    }
+
+    function closeModal(){
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    document.querySelectorAll('[data-product]').forEach(el => {
+        el.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            const d = this.dataset;
+            openModal({
+                id: d.id || '',
+                name: d.name || (this.querySelector('.nomeP')?.textContent?.trim() || 'Produto'),
+                image: d.image || (this.querySelector('img')?.src || ''),
+                price: d.price || '',
+                desc: d.desc || ''
+            });
+        });
+    });
+});
+</script>
+
 </body>
 </html>

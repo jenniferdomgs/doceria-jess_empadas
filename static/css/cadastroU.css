@@ -1,6 +1,6 @@
 * {
-    margin: 0%;
-    padding: 0%;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -11,22 +11,27 @@
 
 body { 
     display: flex;
-    background-color: #FFEFC6;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #FFEFC6;
+    font-family: "montserrat";
 }
+
 
 .homeButton {
     width: 45px;
     height: 30px;
     display: flex;
+    align-items: center;
+    justify-content: center;
     color: #AD6336;
     border: none;
     background-color: #FFDDA7;
     cursor: pointer;
-    align-items: center;
     position: absolute;
-    margin-right: 1200px;
+    top: 20px;
+    left: 20px;
 }
 
 .homeButton > i {
@@ -34,42 +39,40 @@ body {
 }
 
 .container1 {
-    margin: 100px;
     display: flex;
-    justify-content:center;
-    width: 1300px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1300px;
     height: 700px;
-    background-image: url(./img/fundo-cadastro.png);
+    padding: 20px;
 }
+
 
 .cadastro {
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    margin-right: 500px;
-    margin-top: 50px;
+    gap: 20px;
     align-items: center;
+    justify-content: center;
     width: 400px;
     height: 630px;
     background-color: #FFDDA7;
     border-radius: 30px;
-    justify-content:flex-start;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
 
-.cadastro > h1 {
-    color: #AD6336;
-    font-family: "montserrat";
-    padding-top: 50px;
+.cadastro img {
+    width: 100%;
 }
-
 
 
 .form-cadastro {
     display: flex;
     flex-direction: column;
-    width: 335px;
-    height: 400px;
-    font-family: "montserrat";
+    gap: 15px;
+    width: 100%;
 }
 
 fieldset {
@@ -77,87 +80,88 @@ fieldset {
     flex-direction: column;
     border: none;
     gap: 5px;
-    
 }
 
 label {
-    border: none;
     color: #00000090;
-    padding-top: 10px;
+    padding-top: 5px;
 }
 
 input {
     border-radius: 8px;
     background-color: #FFEFC6;
-    width: 335px;
+    width: 100%;
     height: 45px;
     text-align: center;
+    border: 1px solid #AD6336;
 }
+
 
 button {
     display: flex;
-    width: 200px;
+    width: 100%;
     height: 45px;
     background-color: #AD6336;
     color: #FFDDA7;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-top: 20px;
     align-items: center;
     justify-content: center;
-    align-content: center;
-    margin-left: 65px;
-    margin-bottom: 0px;
+}
+
+.homeButton:hover {
+    opacity: 0.5;
 }
 
 #cadastroM {
     display: none;
 }
 
-
-@media screen and (max-width: 768px) {
-    
-    body {
-        width: 100%;
-        height: auto;
-    }
-    .container1 {
-        background-image: none;
-        width: 410px;
-        height: 800px;
-    }
-    .cadastro {
-        margin: 0%;
-        background-color: #AD6336;
-        width: 410px;
-        border-radius: 30px;
-        height: auto;
-        z-index: 0;
-    }
-    .cadastro > h1 {
-        display: none;
-    }
-    #cadastroM {
-        display: block;
-        width: 410px;
-        padding-top: 30px;
-    }
-    label {
-        color: #FFEFC6;
-    }
-    #cadastrar {
-        background-color: #FFDDA7;
-        color: #AD6336;
-    }
-    .homeButton {
-        background-color: #AD6336;
-        color: #FFDDA7;
-        z-index: 1;
-        margin: 0%;
-        margin-left: 300px;
-        margin-top: 20px;
-    }
+.cadastrar {
+    margin-top: 20px;
 }
 
 
+
+@media screen and (max-width: 768px) {
+    .container1 {
+        width: 100%;
+        height: auto;
+        background-image: none;
+    }
+
+    .cadastro {
+        width: 410px;
+        height: auto;
+        background-color: #AD6336;
+        border-radius: 30px;
+        padding: 20px;
+    }
+
+    .cadastro > h1 {
+        display: none;
+    }
+
+    #cadastroM {
+        display: block;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    label {
+        color: #FFEFC6;
+    }
+
+    button#cadastrar {
+        background-color: #FFDDA7;
+        color: #AD6336;
+    }
+
+    .homeButton {
+        background-color: #AD6336;
+        color: #FFDDA7;
+        top: 20px;
+        left: 20px;
+    }
+}

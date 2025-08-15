@@ -1,6 +1,6 @@
 * {
-    margin: 0%;
-    padding: 0%;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -11,43 +11,46 @@
 
 body { 
     display: flex;
-    background-color: #FFEFC6;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #FFEFC6;
+    font-family: "montserrat";
 }
 
 .containerL {
-    margin: 100px;
     display: flex;
-    justify-content: space-between;
-    width: 1300px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1300px;
     height: 700px;
-    background-image: url(./img/fundo-login.jpg);
+    padding: 20px;
 }
 
 .login {
     display: flex;
     flex-direction: column;
     gap: 30px;
-    margin-left: 800px;
     align-items: center;
-    width: 680px;
-    height: 700px;
+    justify-content: center;
+    width: 400px;
+    height: 630px;
     background-color: #FFDDA7;
-    justify-content: flex-end;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    padding: 20px;
 }
 
-.login > h1 {
-    color: #AD6336;
-    font-family: "montserrat";
+.login img {
+    width: 100%;
 }
 
 .form-login {
     display: flex;
     flex-direction: column;
+    gap: 20px;
     width: 335px;
-    height: 400px;
-    font-family: "montserrat";
 }
 
 fieldset {
@@ -55,63 +58,82 @@ fieldset {
     flex-direction: column;
     border: none;
     gap: 10px;
-    
 }
 
 label {
-    border: none;
     color: #00000090;
 }
 
 input {
     border-radius: 8px;
     background-color: #FFEFC6;
-    width: 335px;
+    width: 100%;
     height: 45px;
     text-align: center;
-}
-
-.loginB {
-    width: 335px;
-    height: 45px;
-    background-color: #FFDDA7;
-    border: none;
-    color: #AD6336;
-    cursor: pointer;
+    border: 1px solid #AD6336;
 }
 
 .entrar {
-    width: 335px;
+    width: 100%;
     height: 45px;
     background-color: #AD6336;
     color: #FFDDA7;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 10px;
+}
+
+.entrar:hover {
+    background-color: #FFDDA7;
+    color: #AD6336;
+    border: 1px solid #AD6336;
+    transition: 0.5s;
+}
+
+.loginB {
+    width: 100%;
+    height: 45px;
+    background-color: #FFDDA7;
+    border: none;
+    color: #AD6336;
+    cursor: pointer;
 }
 
 .homeButton {
     width: 45px;
     height: 30px;
     display: flex;
-    color: #FFDDA7;
-    border: none;
-    background-color: #AD6336;
-    cursor: pointer;
     align-items: center;
-    margin: 20px;
+    justify-content: center;
+    color: #AD6336;
+    border: none;
+    background-color: #FFDDA7;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left: 20px;
 }
 
 .homeButton > i {
     font-size: 25px;
 }
 
-.entrar:hover {
-    background-color: #FFDDA7;
-    color: #AD6336;
-    transition: 1s;
-    border: #AD6336 solid 1px;
+.homeButton:hover {
+    opacity: 0.5;
+}
+
+button {
+    display: flex;
+    width: 100%;
+    height: 45px;
+    background-color: #AD6336;
+    color: #FFDDA7;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
 }
 
 #s {
@@ -122,59 +144,67 @@ input {
     display: none;
 }
 
+#cdst {
+    text-decoration: none;
+    color: #AD6336;
+}
+
+
+
 @media screen and (max-width: 768px) {
-    
-    body {
+    .containerL {
         width: 100%;
         height: auto;
-    }
-    .containerL {
         background-image: none;
-        width: 410px;
-        height: 800px;
     }
+
     .login {
-        margin: 0%;
-        background-color: #AD6336;
         width: 410px;
+        height: auto;
+        padding: 20px;
+        background-color: #AD6336;
         border-radius: 30px;
     }
-    .login > h1 {
-        display: none;
+    
+    .login img {
+        width: 400px;
     }
+
     #loginM {
         display: block;
-        width: 410px;
+        width: 100%;
+        margin-bottom: 20px;
     }
+
     label {
         color: #FFDDA7;
     }
+
     .loginB {
         background-color: #AD6336;
         color: #FFDDA7;
     }
+
     .entrar {
         background-color: #FFDDA7;
         color: #AD6336;
     }
+
     .entrar:hover {
         background-color: #AD6336;
         color: #FFDDA7;
-        border: #FFDDA7 solid 1px;
+        border: 1px solid #FFDDA7;
     }
-    .homeButton {
-        width: auto;
-        height: 60px;
-        position:absolute;
-        margin-right: 300px;
-    }
-    .homeButton > i {
-        font-size: 40px;
-    }
-}
 
-#cdst{
-    text-decoration: none;
-        color: #AD6336;
-        
+    .homeButton {
+        width: 40px;
+        height: 30px;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+
+    .homeButton > i {
+        font-size: 30px;
+    }
 }

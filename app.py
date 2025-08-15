@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, flash
+from flask import Flask, render_template, request, url_for, redirect, flash, abort
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from models import User
 import psycopg2
@@ -51,14 +51,14 @@ def home():
 
     if termo:
         cursor.execute("""
-            SELECT produto.nome, imagem.urlImagem
-            FROM produto
-            JOIN imagem ON produto.codproduto = imagem.codProduto
-            WHERE LOWER(produto.nome) LIKE %s
-        """, (f"%{termo.lower()}%",))
+        SELECT produto.nome, imagem.urlImagem, produto.codproduto, produto.valor, produto.descricao
+        FROM produto
+        JOIN imagem ON produto.codproduto = imagem.codProduto
+        WHERE LOWER(produto.nome) LIKE %s
+    """, (f"%{termo.lower()}%",))
     else:
         cursor.execute("""
-            SELECT produto.nome, imagem.urlImagem
+            SELECT produto.nome, imagem.urlImagem, produto.codproduto, produto.valor, produto.descricao
             FROM produto
             JOIN imagem ON produto.codproduto = imagem.codProduto
         """)
@@ -74,6 +74,38 @@ def home():
                            tipo_usuario=tipo_usuario, 
                            termo_pesquisa=termo,
                            mais_vendidos=[])  
+
+
+@app.route('/produto/<string:id>', methods=['GET'])
+def produto_detalhes(id):
+    connection = conexaodb()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados."
+
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT produto.nome, produto.descricao, produto.valor, imagem.urlImagem, produto.codproduto
+        FROM produto
+        LEFT JOIN imagem ON produto.codproduto = imagem.codProduto
+        WHERE produto.codproduto = %s
+        LIMIT 1
+    """, (id,))
+    row = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    if not row:
+        abort(404)
+
+    produto = {
+        'nome': row[0],
+        'descricao': row[1],
+        'valor': row[2],
+        'imagem': row[3],
+        'codproduto': row[4]
+    }
+
+    return render_template('produto.html', produto=produto)
 
 
 @app.route('/carrinho', methods=['POST'])
@@ -246,11 +278,10 @@ def pesquisar():
 
     cursor = connection.cursor()
     cursor.execute("""
-        SELECT produto.nome, imagem.urlImagem
-        FROM produto
-        JOIN imagem ON produto.codproduto = imagem.codProduto
-        WHERE LOWER(produto.nome) LIKE %s
-    """, (f"%{termo.lower()}%",))
+    SELECT produto.nome, imagem.urlImagem, produto.codproduto, produto.valor, produto.descricao
+    FROM produto
+    JOIN imagem ON produto.codproduto = imagem.codProduto
+    WHERE LOWER(produto.nome) LIKE %s""", (f"%{termo.lower()}%",))
     resultados = cursor.fetchall()
 
     cursor.close()
