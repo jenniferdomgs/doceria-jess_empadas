@@ -10,7 +10,7 @@
 <body>
 <header>
     <nav>
-        <img id="logo" src="../static/img/logo.png">
+        <img id="logo" src="{{ url_for('static', filename='img/logo.png') }}">
         <div id="P">
             <form method="GET" action="{{ url_for('home') }}" class="search-form">
                 <input type="text" name="q" placeholder="Pesquisa..." value="{{ termo_pesquisa or '' }}">
@@ -21,7 +21,7 @@
         </div>                           
         <div id="inverte">
             <i id="burguer" onclick="clickMenu()"><i class="fa-solid fa-bars"></i></i>
-            <div id="overlay" >
+            <div id="overlay">
                 <div id="itens" class="menu">
                     <a href="#" onclick="clickMenu()">Home</a>
                     <a href="#produtos" onclick="clickMenu()">Produtos</a>
@@ -66,6 +66,38 @@ function clickMenu() {
 </script>
 
 <main>
+    {% if tipo_usuario == 'fornecedor' %}
+    <section id="painel-fornecedor-topo">
+        <h2><i class="fa-solid fa-chart-line"></i> Painel do Fornecedor</h2>
+
+        <div class="painel-botoes">
+            <a href="{{ url_for('cadastroProduto') }}" class="btn-acao">
+                <i class="fa-solid fa-plus"></i> Cadastrar Produto
+            </a>
+            <a href="{{ url_for('cadastroFornecedor') }}" class="btn-acao">
+                <i class="fa-solid fa-user-plus"></i> Cadastrar Fornecedor
+            </a>
+        </div>
+
+        <div class="painel-produtos">
+            {% for produto in produtos %}
+            <div class="painel-card {% if produto.validade_proxima %}alerta-validade{% endif %}">
+                <img src="{{ produto.imagem }}" alt="{{ produto.nome }}">
+                <div class="painel-info">
+                    <h3>{{ produto.nome }}</h3>
+                    <p>Preço: R$ {{ produto.valor }}</p>
+                    <p>Categoria: {{ produto.categoria }}</p>
+                    <p>Validade: {{ produto.validade }}</p>
+                    {% if produto.validade_proxima %}
+                        <span class="badge-alerta">⚠ Validade próxima</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>        
+    </section>
+    {% else %}
+    <!-- HERO só aparece para usuários não fornecedores -->
     <section id="hero">
         <div class="hero-content">
             <h1>Jess Empadas</h1>
@@ -73,25 +105,27 @@ function clickMenu() {
             <a href="#produtos" class="btn-hero">Ver Produtos</a>
         </div>
     </section>
-
+    {% endif %}
+    <!-- FAZER COM BASE NAS VENDAS REAIS
     <section id="destaques">
         <h2>Mais Vendidos</h2>
         <div class="produtos-grid">
             {% for produto in mais_vendidos %}
             <a href="javascript:void(0)" class="card-produto destaque" data-product
-               data-id="{{ produto[2] }}"
-               data-name="{{ produto[0] }}"
-               data-image="{{ produto[1] }}"
-               data-price="{{ produto[3]|default('', true) }}"
-               data-desc="{{ produto[4]|default('', true) }}">
+               data-id="{{ produto.codproduto }}"
+               data-name="{{ produto.nome }}"
+               data-image="{{ produto.imagem }}"
+               data-price="{{ produto.valor }}"
+               data-desc="{{ produto.descricao }}">
                 <div class="card-imgP">
-                    <img src="{{ produto[1] }}" alt="{{ produto[0] }}">
+                    <img src="{{ produto.imagem }}" alt="{{ produto.nome }}">
                 </div>
-                <div class="nomeP">{{ produto[0] }}</div>
+                <div class="nomeP">{{ produto.nome }}</div>
             </a>
             {% endfor %}
         </div>              
     </section>
+    -->
 
     {% if termo_pesquisa %}
         <h2>Resultados para "{{ termo_pesquisa }}":</h2>
@@ -101,28 +135,30 @@ function clickMenu() {
     {% endif %}
 
     <section id="produtos">
-        {% for produto in produtos %}
-        <a href="javascript:void(0)" class="card-produto" data-product
-           data-id="{{ produto[2] }}"
-           data-name="{{ produto[0] }}"
-           data-image="{{ produto[1] }}"
-           data-price="{{ produto[3]|default('', true) }}"
-           data-desc="{{ produto[4]|default('', true) }}">
-            <div class="card-imgP">
-                <img src="{{ produto[1] }}" alt="{{ produto[0] }}">
-                <div class="nomeP"><p>{{ produto[0] }}</p></div>
+        {% for categoria, lista in {'Doces': doces, 'Salgados': salgados}.items() %}
+            <h2>{{ categoria }}</h2>
+            <div class="produtos-grid">
+                {% for produto in lista %}
+                <a href="javascript:void(0)" class="card-produto" data-product
+                   data-id="{{ produto.codproduto }}"
+                   data-name="{{ produto.nome }}"
+                   data-image="{{ produto.imagem }}"
+                   data-price="{{ produto.valor }}"
+                   data-desc="{{ produto.descricao }}">
+                    <div class="card-imgP">
+                        <img src="{{ produto.imagem }}" alt="{{ produto.nome }}">
+                        <div class="nomeP"><p>{{ produto.nome }}</p></div>
+                    </div>
+                </a>
+                {% endfor %}
             </div>
-        </a>
         {% endfor %}
     </section>
-
-    {% if tipo_usuario == 'fornecedor' %}
-        <a href="{{ url_for('cadastrarP') }}" class="botao-cadastro">Cadastrar Produto</a>
-    {% endif %}
+    
 
     <section id="sobre-loja">
         <div class="sobre-imagem-grande">
-            <img src="../static/img/jess1.png" alt="Dona da Jess Empadas">
+            <img src="{{ url_for('static', filename='img/jess1.png') }}" alt="Dona da Jess Empadas">
         </div>
         <div class="sobre-conteudo">
             <h2>Como Surgimos?</h2>
@@ -131,16 +167,16 @@ function clickMenu() {
             <p>Aqui estou, dando continuidade a esse sonho, que cada vez vem tomando mais forma. Tenho aprendido com a "Jess Empadas" que ter coragem para ir adiante, mesmo com medo, pode resultar em algo lindo e gratificante.</p>
             <div class="sobre-cards">
                 <div class="card-sobre">
-                    <img src="../static/img/card1.jpg" alt="produção">
+                    <img src="{{ url_for('static', filename='img/produção1.jpeg') }}" alt="produção">
                     <p>Primeira fornada de empadas</p>
                 </div>
                 <div class="card-sobre">
-                    <img src="../static/img/card2.jpg" alt="Jess e amiga">
-                    <p>Jess & Kelly</p>
+                    <img src="{{ url_for('static', filename='img/banner.png') }}" alt="criei minha logo">
+                    <p>Criação da Identidade Visual</p>
                 </div>
                 <div class="card-sobre">
-                    <img src="../static/img/card3.jpg" alt="primeira encomenda">
-                    <p>Primeira Encomenda para festa</p>
+                    <img src="{{ url_for('static', filename='img/jessekelly.jpeg') }}" alt="Jess e amiga">
+                    <p>Jess & Kelly: primeiras vendas</p>
                 </div>
             </div>
         </div>
@@ -149,7 +185,7 @@ function clickMenu() {
 
 <footer id="footer">
     <div class="footer-content">
-        <img id="logoF" src="../static/img/logo.png" alt="Logo da Sua Empresa">
+        <img id="logoF" src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo da Sua Empresa">
         <div class="contact-info">
             <div>
                 <h3 class="title">Contato</h3>

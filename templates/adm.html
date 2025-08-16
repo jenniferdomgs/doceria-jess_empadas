@@ -11,10 +11,9 @@
     <div class="container1">
         <button class="homeButton" onclick="redirectToHome()"><i class="fa-solid fa-arrow-left"></i></button>
         <div class="cadastro">
-            <h1>CADASTRO FORNECEDOR</h1>
             <img src="{{ url_for('static', filename='img/cadastroM.png') }}">
             <div class="form-cadastro">
-                <form action="/cadastroADM" method="POST">
+                <form action="/cadastroFornecedor" method="POST">
                     <fieldset>
                         <label for="cnpj">CNPJ:</label>
                         <input type="text" id="cnpj" name="cnpj" placeholder="Insira seu CNPJ" required>
