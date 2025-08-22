@@ -139,19 +139,29 @@ function clickMenu() {
             <h2>{{ categoria }}</h2>
             <div class="produtos-grid">
                 {% for produto in lista %}
-                <a href="javascript:void(0)" class="card-produto" data-product
-                   data-id="{{ produto.codproduto }}"
-                   data-name="{{ produto.nome }}"
-                   data-image="{{ produto.imagem }}"
-                   data-price="{{ produto.valor }}"
-                   data-desc="{{ produto.descricao }}">
+                <div class="card-produto" data-product
+                     data-id="{{ produto.codproduto }}"
+                     data-name="{{ produto.nome }}"
+                     data-image="{{ produto.imagem }}"
+                     data-price="{{ '%.2f'|format(produto.valor) }}"
+                     data-desc="{{ produto.descricao }}">
+              
                     <div class="card-imgP">
                         <img src="{{ produto.imagem }}" alt="{{ produto.nome }}">
-                        <div class="nomeP"><p>{{ produto.nome }}</p></div>
                     </div>
-                </a>
+              
+                    <div class="card-info">
+                        <h3>{{ produto.nome }}</h3>
+                        <p class="desc">{{ produto.descricao }}</p>
+              
+                        <div class="card-footer">
+                            <span class="preco">R$ {{ '%.2f'|format(produto.valor) }}</span>
+                            <button class="btn-produto" type="button">Ver Produto</button>
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
-            </div>
+              </div>                  
         {% endfor %}
     </section>
     
@@ -206,7 +216,7 @@ function clickMenu() {
 </footer>
 
 <!-- MODAL PRODUTO -->
-<div class="modal-overlay" id="productModal" aria-hidden="true" role="dialog" aria-modal="true">
+<div class="modal-overlay" id="productModal">
     <div class="modal" role="document">
         <div class="modal-header">
             <h2 class="modal-title">Produto</h2>
@@ -233,75 +243,81 @@ function clickMenu() {
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const overlay = document.getElementById('productModal');
-    const closeBtn = overlay.querySelector('.modal-close');
-    const titleEl = overlay.querySelector('.modal-title');
-    const nameEl  = overlay.querySelector('.modal-name');
-    const imgEl   = overlay.querySelector('.modal-img');
-    const descEl  = overlay.querySelector('.modal-desc');
-    const priceEl = overlay.querySelector('.modal-price');
-    const cartForm = overlay.querySelector('.modal-cart');
-    const idInput  = cartForm.querySelector('input[name="produto_id"]');
-
-    function parseDesc(raw) {
-        if (!raw) return [];
-        try {
-            const j = JSON.parse(raw);
-            if (Array.isArray(j)) return j;
-        } catch(e){}
-        return String(raw).split('||').map(s => s.trim()).filter(Boolean);
-    }
-
-    function openModal(data){
-        const { id='', name='Produto', image='', price='', desc='' } = data;
-        titleEl.textContent = 'Detalhes do Produto';
-        nameEl.textContent = name;
-        imgEl.src = image || '';
-        imgEl.alt = name;
-
-        descEl.innerHTML = '';
-        const itens = parseDesc(desc);
-        if (itens.length){
-            itens.forEach(t => {
-                const li = document.createElement('li');
-                li.textContent = t;
-                descEl.appendChild(li);
-            });
+    document.addEventListener('DOMContentLoaded', function () {
+        const overlay   = document.getElementById('productModal'); 
+        const modal     = overlay.querySelector('.modal');
+        const closeBtn  = overlay.querySelector('.modal-close');
+        const titleEl   = overlay.querySelector('.modal-title');
+        const nameEl    = overlay.querySelector('.modal-name');
+        const imgEl     = overlay.querySelector('.modal-img');
+        const descEl    = overlay.querySelector('.modal-desc');
+        const priceEl   = overlay.querySelector('.modal-price');
+        const cartForm  = overlay.querySelector('.modal-cart');
+        const idInput   = cartForm.querySelector('input[name="produto_id"]');
+    
+        function parseDesc(raw) {
+            if (!raw) return [];
+            try {
+                const j = JSON.parse(raw);
+                if (Array.isArray(j)) return j;
+            } catch(e){}
+            return String(raw).split('||').map(s => s.trim()).filter(Boolean);
         }
-
-        priceEl.textContent = price ? `R$ ${price}` : '';
-        idInput.value = id || '';
-
-        overlay.classList.add('open');
-        overlay.setAttribute('aria-hidden', 'false');
-        closeBtn.focus();
-    }
-
-    function closeModal(){
-        overlay.classList.remove('open');
-        overlay.setAttribute('aria-hidden', 'true');
-    }
-
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-
-    document.querySelectorAll('[data-product]').forEach(el => {
-        el.addEventListener('click', function (ev) {
-            ev.preventDefault();
-            const d = this.dataset;
-            openModal({
-                id: d.id || '',
-                name: d.name || (this.querySelector('.nomeP')?.textContent?.trim() || 'Produto'),
-                image: d.image || (this.querySelector('img')?.src || ''),
-                price: d.price || '',
-                desc: d.desc || ''
+    
+        function openModal(data){
+            const { id='', name='Produto', image='', price='', desc='' } = data;
+            titleEl.textContent = 'Detalhes do Produto';
+            nameEl.textContent  = name;
+            imgEl.src           = image || '';
+            imgEl.alt           = name;
+    
+            descEl.innerHTML = '';
+            const itens = parseDesc(desc);
+            if (itens.length){
+                itens.forEach(t => {
+                    const li = document.createElement('li');
+                    li.textContent = t;
+                    descEl.appendChild(li);
+                });
+            }
+    
+            priceEl.textContent = price ? `R$ ${price}` : '';
+            idInput.value       = id || '';
+    
+            overlay.style.display = 'flex'; 
+            overlay.setAttribute('aria-hidden', 'false');
+            closeBtn.focus();
+        }
+    
+        function closeModal(){
+            overlay.style.display = 'none';
+            overlay.setAttribute('aria-hidden', 'true');
+        }
+    
+        closeBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', (e) => { 
+            if (e.target === overlay) closeModal(); 
+        });
+        document.addEventListener('keydown', (e) => { 
+            if (e.key === 'Escape') closeModal(); 
+        });
+    
+        document.querySelectorAll('[data-product]').forEach(el => {
+            el.addEventListener('click', function (ev) {
+                ev.preventDefault();
+                const d = this.dataset;
+                openModal({
+                    id: d.id || '',
+                    name: d.name || (this.querySelector('.nomeP, h3')?.textContent?.trim() || 'Produto'),
+                    image: d.image || (this.querySelector('img')?.src || ''),
+                    price: d.price || '',
+                    desc: d.desc || ''
+                });
             });
         });
     });
-});
 </script>
+    
 
 </body>
 </html>
