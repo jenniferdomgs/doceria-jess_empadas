@@ -175,28 +175,39 @@ def produto_detalhes(id):
 @login_required
 def carrinho_adicionar():
     produto_id = request.form.get('produto_id')
-    if not produto_id or not current_user.is_authenticated:
-        return jsonify(success=False, error="Usuário ou produto inválido")
+    if not produto_id:
+        return jsonify(success=False, error="Produto inválido.")
 
+    user_id = getattr(current_user, "cpf", current_user.id)
     connection = conexaodb()
     if connection is None:
-        return jsonify({"success": False, "error": "Erro ao conectar ao banco de dados."})
+        return jsonify(success=False, error="Erro ao conectar ao banco.")
 
-    cursor = connection.cursor()
     try:
-        cursor.execute("SELECT quantidade FROM carrinho WHERE cpfUsuario=%s AND codProduto=%s", 
-                       (current_user.id, produto_id))
+        cursor = connection.cursor()
+        # verifica se produto já está no carrinho
+        cursor.execute("""
+            SELECT quantidade FROM carrinho 
+            WHERE cpfUsuario=%s AND codProduto=%s AND codCompra IS NULL
+        """, (user_id, produto_id))
         item = cursor.fetchone()
+
         if item:
             nova_qtd = item[0] + 1
-            cursor.execute("UPDATE carrinho SET quantidade=%s WHERE cpfUsuario=%s AND codProduto=%s",
-                           (nova_qtd, current_user.id, produto_id))
+            cursor.execute("""
+                UPDATE carrinho 
+                SET quantidade=%s 
+                WHERE cpfUsuario=%s AND codProduto=%s AND codCompra IS NULL
+            """, (nova_qtd, user_id, produto_id))
         else:
-            cursor.execute("INSERT INTO carrinho (cpfUsuario, codProduto, quantidade, codCompra) VALUES (%s, %s, %s, %s)",
-                           (current_user.id, produto_id, 1, 1))  
+            cursor.execute("""
+                INSERT INTO carrinho (cpfUsuario, codProduto, quantidade) 
+                VALUES (%s, %s, %s)
+            """, (user_id, produto_id, 1))
 
         connection.commit()
         return jsonify(success=True, message="Produto adicionado ao carrinho!")
+
     except Exception as e:
         connection.rollback()
         print("Erro ao adicionar ao carrinho:", e)
@@ -208,28 +219,98 @@ def carrinho_adicionar():
 @app.route('/carrinho', methods=['GET', 'POST'])
 @login_required
 def carrinho_ver():
+    user_id = getattr(current_user, "cpf", current_user.id)
     connection = conexaodb()
     cursor = connection.cursor()
+
     cursor.execute("""
         SELECT p.codproduto, p.nome, p.valor, i.urlImagem, c.quantidade
         FROM carrinho c
         JOIN produto p ON p.codproduto = c.codProduto
         LEFT JOIN imagem i ON i.codProduto = p.codproduto
-        WHERE c.cpfUsuario = %s
-    """, (current_user.id,))
+        WHERE c.cpfUsuario = %s AND c.codCompra IS NULL
+    """, (user_id,))
 
     carrinho = cursor.fetchall()
-    # converter para dicionário
     lista_carrinho = []
+    subtotal = 0  
+
     for c in carrinho:
+        valor = float(c[2]) 
+        quantidade = int(c[4])
+        item_total = valor * quantidade
+        subtotal += item_total  
+
         lista_carrinho.append({
             'codproduto': c[0],
             'nome': c[1],
-            'valor': float(c[2]),
+            'valor': valor,
             'imagem': c[3],
-            'quantidade': c[4]
+            'quantidade': quantidade,
+            'total': item_total  
         })
-    return render_template('carrinho.html', carrinho=lista_carrinho)
+
+    cursor.close()
+    connection.close()
+
+    return render_template('carrinho.html', carrinho=lista_carrinho, subtotal=subtotal)
+
+
+@app.route("/carrinho/atualizar/<int:codProduto>", methods=['GET', 'POST'])
+@login_required
+def atualizar_carrinho(codProduto):
+    user_id = getattr(current_user, "cpf", current_user.id)
+    action = request.form.get("action")
+    connection = conexaodb()
+    cursor = connection.cursor()
+
+    try:
+        if action == "increment":
+            cursor.execute("""
+                UPDATE carrinho 
+                SET quantidade = quantidade + 1 
+                WHERE cpfUsuario = %s AND codProduto = %s AND codCompra IS NULL
+            """, (user_id, codProduto))
+        elif action == "decrement":
+            cursor.execute("""
+                UPDATE carrinho 
+                SET quantidade = quantidade - 1 
+                WHERE cpfUsuario = %s AND codProduto = %s AND codCompra IS NULL
+                  AND quantidade > 1
+            """, (user_id, codProduto))
+
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        print("Erro ao atualizar carrinho:", e)
+    finally:
+        cursor.close()
+        connection.close()
+
+    return redirect(url_for("carrinho_ver"))
+
+@app.route("/carrinho/remover/<int:codProduto>", methods=['GET', 'POST'])
+@login_required
+def remover_carrinho(codProduto):
+    user_id = getattr(current_user, "cpf", current_user.id)
+    connection = conexaodb()
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute("""
+            DELETE FROM carrinho 
+            WHERE cpfUsuario = %s AND codProduto = %s AND codCompra IS NULL
+        """, (user_id, codProduto))
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        print("Erro ao remover do carrinho:", e)
+    finally:
+        cursor.close()
+        connection.close()
+
+    return redirect(url_for("carrinho_ver"))
+
 
 
 @app.route('/login', methods=['GET', 'POST'])

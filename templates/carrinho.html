@@ -1,47 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jess empadas #Carrinho</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/carrinho.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jess Empadas #Carrinho</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/carrinho.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
 </head>
 
 <body>
-    <button class="homeButton" onclick="redirectToHome()"><i class="fa-solid fa-arrow-left"></i></button>
-    <div class="cart-container">
-      <h2>Seu Carrinho</h2>
-  
+  <button class="homeButton" onclick="redirectToHome()"><i class="fa-solid fa-arrow-left"></i></button>
+
+  <div class="cart-container">
+    <h2>🛒 Seu Carrinho</h2>
+
+    {% if carrinho %}
       <ul class="cart-list">
         {% for item in carrinho %}
-        <li>
+          <li class="cart-item">
             <div class="product-details">
-                <div class="img-produto">
-                    <img src="{{ url_for('static', filename=item.imagem.split('static/')[-1]) }}" alt="{{ item.nome }}">
-                </div>
-                <div class="info">
-                    <p class="p-infos">{{ item.nome }}</p>
-                    <p class="p-infos">Valor: R$ {{ '%.2f'|format(item.valor) }}</p>
-                    <p class="p-infos">Quantidade: {{ item.quantidade }}</p>
-                </div>
+              <div class="img-produto">
+                <img src="{{ item.imagem }}" alt="{{ item.nome }}">
+              </div>
+              <div class="info">
+                <h3>{{ item.nome }}</h3>
+                <p>Preço: R$ {{ '%.2f'|format(item.valor) }}</p>
+                <p>
+                  Quantidade: 
+                  <form action="/carrinho/atualizar/{{ item.codproduto }}" method="POST" style="display:inline;">
+                    <button type="submit" name="action" value="decrement">−</button>
+                    {{ item.quantidade }}
+                    <button type="submit" name="action" value="increment">+</button>
+                  </form>
+                </p>
+                <p><strong>Total: R$ {{ '%.2f'|format(item.total) }}</strong></p>
+                <form action="/carrinho/remover/{{ item.codproduto }}" method="POST" style="margin-top:5px;">
+                  <button type="submit" class="remove-btn">🗑 Excluir</button>
+                </form>
+              </div>
             </div>
-        </li>
+          </li>
         {% endfor %}
       </ul>
-    
-      <hr>
-      
+
       <div class="cart-summary">
-        <p class="p-total">Subtotal: R$</p>
-        <p class="p-total">Subtotal: R$ {{ carrinho|sum(attribute='valor') }}</p>
-        <button class="choose-payment-btn">Escolher Forma de Pagamento</button>
+        <hr>
+        <p class="p-total">Subtotal: <strong>R$ {{ '%.2f'|format(subtotal) }}</strong></p>
+        <button class="choose-payment-btn">Finalizar Compra</button>
       </div>
-    </div>
-    <script>
-      function redirectToHome() {
-          window.location.href = "/";
-      }
+    {% else %}
+      <p>Seu carrinho está vazio 😢</p>
+    {% endif %}
+  </div>
+
+  <script>
+    function redirectToHome() {
+      window.location.href = "/";
+    }
   </script>
-  </body>
-  </html>
+</body>
+</html>

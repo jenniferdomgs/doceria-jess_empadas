@@ -1,43 +1,52 @@
-* {box-sizing: border-box;color: #442c1a;font-family: montserrat;}
+* {box-sizing: border-box;color: #442c1a;font-family: montserrat, Arial, sans-serif;}
 
-@font-face {font-family: "montserrat";src: url(./fontes/Montserrat-Regular.otf);}   
-
-
-body {font-family: Arial, sans-serif;margin: 0;background-color: #DFB470;color: #333;display: flex;align-items: center;}
+@font-face {font-family: "montserrat";src: url(./fontes/Montserrat-Regular.otf);}
   
-.cart-container {width: 1300px;height: auto;margin: 50px auto;background-color: #FFEFC6;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}
-
-.product-details {display: flex;align-items: center;}
-
-.homeButton {width: 60px;height: 50px;display: flex;border: none;background-color: #DFB470;cursor: pointer;align-items: center;justify-content: center;margin-bottom: 350px;margin-left: 50px;position:sticky;}
-
-.homeButton > i {font-size: 40px;color: #674228;}
-
-.product-details > .img-produto {display: flex;justify-content: center;align-items: center;width: 150px;height: 150px;background-color: #DFB470;}
-
-.p-infos {font-size: 12px;margin:10px;color: #704D34;}
-
-.p-total {margin:10px;color: #333;}
-
-.info {margin-left: 100px;}
-
-.cart-container > .cart-list > img {display: flex;    border: 1px solid;}
+body {margin: 0;background-color: #DFB470;color: #333;display: flex;justify-content: center;align-items: flex-start;min-height: 100vh;padding: 20px;}
   
-h2 {text-align: center;color: #704D34;}
+.cart-container {width: 100%;max-width: 1200px;background-color: #FFEFC6;padding: 20px;border-radius: 12px;box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);}
   
-hr {border: 1px solid #DFB470;margin: 10px 0;}
-
-.cart-list {list-style: none;padding: 0;}
+h2 {text-align: center;color: #704D34;font-size: 28px;margin-bottom: 20px;}
   
-.cart-list li {margin-bottom: 10px;padding: 10px;display: flex;align-items: center;}
+hr {border: 1px solid #DFB470;margin: 15px 0;}
   
-.cart-list li img {width: 80px;height: 80px;margin-right: 20px;}
+.cart-list {list-style: none;padding: 0;margin: 0;}
   
-.info {flex: 1;}
-
-.cart-summary {margin-top: 20px;}
-
-.choose-payment-btn {background-color: #DFB470;color: #fff;margin-top: 20px;padding: 10px;border: none;border-radius: 4px;border:1px solid #704D34;cursor: pointer;display: block;margin: 0 auto;}
+.cart-list li {display: flex;align-items: center;background: #fff8e6;margin-bottom: 15px;padding: 15px;border-radius: 10px;border: 1px solid #DFB470;transition: transform 0.2s ease-in-out;}
   
+.cart-list li:hover {transform: scale(1.02);}
   
+.cart-list li img {width: 90px;height: 90px;border-radius: 8px;object-fit: cover;margin-right: 20px;border: 1px solid #DFB470;}
+  
+.product-details {display: flex;align-items: center;gap: 15px;flex-wrap: wrap;}
+  
+.img-produto {display: flex;justify-content: center;align-items: center;width: 120px;height: 120px;background-color: #DFB470;border-radius: 8px;}
+  
+.info {flex: 1;min-width: 200px;}
+  
+.p-infos {font-size: 14px;margin: 5px 0;color: #704D34;}
+  
+.p-total {font-size: 15px;font-weight: bold;color: #333;}
+  
+.cart-summary {margin-top: 30px;text-align: center;}
+  
+.choose-payment-btn {background-color: #DFB470;color: #fff;margin-top: 20px;padding: 12px 25px;border: 1px solid #704D34;border-radius: 8px;cursor: pointer;font-size: 16px;font-weight: bold;transition: 0.3s ease;}
+  
+.choose-payment-btn:hover {background-color: #704D34;color: #fff3d9;}
+  
+.homeButton {width: 50px;height: 40px;display: flex;border: none;background-color: #DFB470;cursor: pointer;align-items: center;justify-content: center;position: fixed;top: 20px;left: 20px;border-radius: 8px;}
+  
+.homeButton > i {font-size: 32px;color: #674228;}
+  
+@media (max-width: 1024px) {.cart-container {padding: 15px;}
+  
+.cart-list li {flex-direction: column;align-items: flex-start;}
+  
+.cart-list li img {margin: 0 0 10px 0;width: 100%;max-width: 250px;}
+  
+.info {margin-left: 0;}}
+  
+@media (max-width: 768px) {h2 {font-size: 22px;}.choose-payment-btn {width: 100%;}.cart-list li {padding: 12px;}}
+  
+@media (max-width: 480px) {body {padding: 10px;}.cart-container {padding: 10px;}h2 {font-size: 20px;}.cart-list li img {width: 100%;max-width: 200px;height: auto;}.p-infos, .p-total {font-size: 13px;}.choose-payment-btn {font-size: 14px;padding: 10px;}}
   
