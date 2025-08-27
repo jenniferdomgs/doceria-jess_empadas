@@ -1,163 +1,32 @@
-* {
-    margin: 0%;
-    padding: 0%;
-    box-sizing: border-box;
-}
+* {margin: 0%;padding: 0%;box-sizing: border-box;}
 
-@font-face {
-    font-family: "montserrat";
-    src: url(./fontes/Montserrat-Bold.otf);
-}
+@font-face {font-family: "montserrat";src: url(./fontes/Montserrat-Bold.otf);}
 
-body { 
-    display: flex;
-    background-color: #FFEFC6;
-    align-items: center;
-    justify-content: center;
-}
+body { display: flex;background-color: #FFEFC6;align-items: center;justify-content: center;}
 
-.homeButton {
-    width: 45px;
-    height: 30px;
-    display: flex;
-    color: #AD6336;
-    border: none;
-    background-color: #FFDDA7;
-    cursor: pointer;
-    align-items: center;
-    position: absolute;
-    margin-right: 1200px;
-}
+.homeButton {width: 45px;height: 30px;display: flex;color: #AD6336;border: none;background-color: #FFDDA7;cursor: pointer;align-items: center;position: absolute;margin-right: 1200px;}
 
-.homeButton > i {
-    font-size: 25px;
-}
+.homeButton > i {font-size: 25px;}
 
-.container1 {
-    margin: 100px;
-    display: flex;
-    justify-content:center;
-    width: 1300px;
-    height: 700px;
-    background-image: url(./img/fundo-adm.png);
-}
+.container1 {margin: 100px;display: flex;justify-content:center;width: 1300px;height: 700px;background-image: url(./img/fundo-adm.png);}
 
-.cadastro {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    margin-right: 500px;
-    margin-top: 50px;
-    align-items: center;
-    width: 400px;
-    height: 630px;
-    background-color: #FFDDA7;
-    border-radius: 30px;
-    justify-content:flex-start;
-}
+.cadastro {display: flex;flex-direction: column;gap: 30px;margin-right: 500px;margin-top: 50px;align-items: center;width: 400px;height: 630px;background-color: #FFDDA7;border-radius: 30px;justify-content:flex-start;}
 
-.cadastro > h1 {
-    color: #AD6336;
-    font-family: "montserrat";
-    padding-top: 50px;
-}
+.cadastro > h1 {color: #AD6336;font-family: "montserrat";padding-top: 50px;}
 
+.form-cadastro {display: flex;flex-direction: column;width: 335px;height: 400px;font-family: "montserrat";}
 
+fieldset {display: flex;flex-direction: column;border: none;gap: 5px;}
 
-.form-cadastro {
-    display: flex;
-    flex-direction: column;
-    width: 335px;
-    height: 400px;
-    font-family: "montserrat";
-}
+label {border: none;color: #00000090;padding-top: 10px;}
 
-fieldset {
-    display: flex;
-    flex-direction: column;
-    border: none;
-    gap: 5px;
-    
-}
+input {border-radius: 8px;background-color: #FFEFC6;width: 335px;height: 45px;text-align: center;}
 
-label {
-    border: none;
-    color: #00000090;
-    padding-top: 10px;
-}
+button {display: flex;width: 200px;height: 45px;background-color: #AD6336;color: #FFDDA7;border: none;border-radius: 8px;cursor: pointer;margin-top: 20px;align-items: center;justify-content: center;align-content: center;margin-left: 65px;margin-bottom: 0px;}
 
-input {
-    border-radius: 8px;
-    background-color: #FFEFC6;
-    width: 335px;
-    height: 45px;
-    text-align: center;
-}
+#cadastroM {display: none;}
 
-button {
-    display: flex;
-    width: 200px;
-    height: 45px;
-    background-color: #AD6336;
-    color: #FFDDA7;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 20px;
-    align-items: center;
-    justify-content: center;
-    align-content: center;
-    margin-left: 65px;
-    margin-bottom: 0px;
-}
-
-#cadastroM {
-    display: none;
-}
-
-
-@media screen and (max-width: 768px) {
-    
-    body {
-        width: 100%;
-        height: auto;
-    }
-    .container1 {
-        background-image: none;
-        width: 410px;
-        height: 800px;
-    }
-    .cadastro {
-        margin: 0%;
-        background-color: #AD6336;
-        width: 410px;
-        border-radius: 30px;
-        height: auto;
-        z-index: 0;
-    }
-    .cadastro > h1 {
-        display: none;
-    }
-    #cadastroM {
-        display: block;
-        width: 410px;
-        padding-top: 30px;
-    }
-    label {
-        color: #FFEFC6;
-    }
-    #cadastrar {
-        background-color: #FFDDA7;
-        color: #AD6336;
-    }
-    .homeButton {
-        background-color: #AD6336;
-        color: #FFDDA7;
-        z-index: 1;
-        margin: 0%;
-        margin-left: 300px;
-        margin-top: 20px;
-    }
+@media screen and (max-width: 768px) {body {width: 100%;height: auto;}.container1 {background-image: none;width: 410px;height: 800px;}.cadastro {margin: 0%;background-color: #AD6336;width: 410px;border-radius: 30px;height: auto;z-index: 0;}.cadastro > h1 {display: none;}#cadastroM {display: block;width: 410px;padding-top: 30px;}label {color: #FFEFC6;}#cadastrar {background-color: #FFDDA7;color: #AD6336;}.homeButton {background-color: #AD6336;color: #FFDDA7;z-index: 1;margin: 0%;margin-left: 300px;margin-top: 20px;}
 }
 
 

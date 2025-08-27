@@ -1,167 +1,34 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* {margin: 0;padding: 0; box-sizing: border-box;}
 
-@font-face {
-    font-family: "montserrat";
-    src: url(./fontes/Montserrat-Bold.otf);
-}
+@font-face {font-family: "montserrat";src: url(./fontes/Montserrat-Bold.otf);}
 
-body { 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #FFEFC6;
-    font-family: "montserrat";
-}
+body {display: flex;justify-content: center;align-items: center;min-height: 100vh;background-color: #FFEFC6;font-family: "montserrat";}
 
+.homeButton {width: 45px;height: 30px;display: flex;align-items: center;justify-content: center;color: #AD6336;border: none;background-color: #FFDDA7;cursor: pointer;position: absolute;top: 20px;left: 20px;}
 
-.homeButton {
-    width: 45px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #AD6336;
-    border: none;
-    background-color: #FFDDA7;
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-}
+.homeButton > i {font-size: 25px;}
 
-.homeButton > i {
-    font-size: 25px;
-}
+.container1 {display: flex;justify-content: center;align-items: center;width: 100%;max-width: 1300px;height: 700px;padding: 20px;}
 
-.container1 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 1300px;
-    height: 700px;
-    padding: 20px;
-}
+.cadastro {display: flex;flex-direction: column;gap: 20px;align-items: center;justify-content: center;width: 400px;height: 630px;background-color: #FFDDA7;border-radius: 30px;padding: 20px;box-shadow: 0 0 20px rgba(0,0,0,0.2);}
 
+.cadastro img {width: 100%;}
 
-.cadastro {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    justify-content: center;
-    width: 400px;
-    height: 630px;
-    background-color: #FFDDA7;
-    border-radius: 30px;
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-}
+.form-cadastro {display: flex;flex-direction: column;gap: 15px;width: 100%;}
 
-.cadastro img {
-    width: 100%;
-}
+fieldset {display: flex;flex-direction: column;border: none;gap: 5px;}
 
+label {color: #00000090;padding-top: 5px;}
 
-.form-cadastro {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-}
+input {border-radius: 8px;background-color: #FFEFC6;width: 100%;height: 45px;text-align: center;border: 1px solid #AD6336;}
 
-fieldset {
-    display: flex;
-    flex-direction: column;
-    border: none;
-    gap: 5px;
-}
+button {display: flex;width: 100%;height: 45px;background-color: #AD6336;color: #FFDDA7;border: none;border-radius: 8px;cursor: pointer;align-items: center;justify-content: center;}
 
-label {
-    color: #00000090;
-    padding-top: 5px;
-}
+.homeButton:hover {opacity: 0.5;}
 
-input {
-    border-radius: 8px;
-    background-color: #FFEFC6;
-    width: 100%;
-    height: 45px;
-    text-align: center;
-    border: 1px solid #AD6336;
-}
+#cadastroM {display: none;}
 
+.cadastrar {margin-top: 20px;}
 
-button {
-    display: flex;
-    width: 100%;
-    height: 45px;
-    background-color: #AD6336;
-    color: #FFDDA7;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-}
-
-.homeButton:hover {
-    opacity: 0.5;
-}
-
-#cadastroM {
-    display: none;
-}
-
-.cadastrar {
-    margin-top: 20px;
-}
-
-
-
-@media screen and (max-width: 768px) {
-    .container1 {
-        width: 100%;
-        height: auto;
-        background-image: none;
-    }
-
-    .cadastro {
-        width: 410px;
-        height: auto;
-        background-color: #AD6336;
-        border-radius: 30px;
-        padding: 20px;
-    }
-
-    .cadastro > h1 {
-        display: none;
-    }
-
-    #cadastroM {
-        display: block;
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
-    label {
-        color: #FFEFC6;
-    }
-
-    button#cadastrar {
-        background-color: #FFDDA7;
-        color: #AD6336;
-    }
-
-    .homeButton {
-        background-color: #AD6336;
-        color: #FFDDA7;
-        top: 20px;
-        left: 20px;
-    }
+@media screen and (max-width: 768px) {.container1 {width: 100%;height: auto;background-image: none;}.cadastro {width: 410px;height: auto;background-color: #AD6336;border-radius: 30px;padding: 20px;}.cadastro > h1 {display: none;}#cadastroM {display: block;width: 100%;margin-bottom: 20px;}label {color: #FFEFC6;}button#cadastrar {background-color: #FFDDA7;color: #AD6336;}.homeButton {background-color: #AD6336;color: #FFDDA7;top: 20px;left: 20px;}
 }

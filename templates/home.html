@@ -20,15 +20,6 @@
             </form>
         </div>                           
         <div id="inverte">
-            <i id="burguer" onclick="clickMenu()"><i class="fa-solid fa-bars"></i></i>
-            <div id="overlay">
-                <div id="itens" class="menu">
-                    <a href="#" onclick="clickMenu()">Home</a>
-                    <a href="#produtos" onclick="clickMenu()">Produtos</a>
-                    <a href="#sobre-loja" onclick="clickMenu()">Sobre</a>
-                    <a href="#footer" onclick="clickMenu()">Contato</a>
-                </div> 
-            </div>
             <div id="F">
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('logout') }}" class="logout-btn" title="Sair">
@@ -42,11 +33,20 @@
                     </form>
                 {% endif %}
                 
-                <form method="POST" action="{{ url_for('carrinho') }}">
+                <form method="POST" action="{{ url_for('carrinho_ver') }}">
                     <button type="submit" name="carrinho" title="Carrinho">
                         <i class="fa-solid fa-cart-shopping"></i>
                     </button>
                 </form>
+            </div>
+            <i id="burguer" onclick="clickMenu()"><i class="fa-solid fa-bars"></i></i>
+            <div id="overlay">
+                <div id="itens" class="menu">
+                    <a href="#" onclick="clickMenu()">Home</a>
+                    <a href="#produtos" onclick="clickMenu()">Produtos</a>
+                    <a href="#sobre-loja" onclick="clickMenu()">Sobre</a>
+                    <a href="#footer" onclick="clickMenu()">Contato</a>
+                </div> 
             </div>                
         </div>
     </nav>
@@ -74,7 +74,7 @@ function clickMenu() {
             <a href="{{ url_for('cadastroProduto') }}" class="btn-acao">
                 <i class="fa-solid fa-plus"></i> Cadastrar Produto
             </a>
-            <a href="{{ url_for('cadastroFornecedor') }}" class="btn-acao">
+            <a href="{{ url_for('cadastroFornecedor') }}" class="btn-acao" id="topo">
                 <i class="fa-solid fa-user-plus"></i> Cadastrar Fornecedor
             </a>
         </div>
@@ -92,9 +92,22 @@ function clickMenu() {
                         <span class="badge-alerta">⚠ Validade próxima</span>
                     {% endif %}
                 </div>
+        
+                <div class="painel-acoes">
+                    <button type="button" class="btn-acao" 
+                            onclick="abrirModalEditar('{{ produto.codproduto }}', '{{ produto.nome }}', '{{ produto.descricao }}', '{{ produto.valor }}', '{{ produto.validade }}', '{{ produto.quantidade }}', '{{ produto.categoria }}')">
+                        <i class="fa-solid fa-pen"></i> Editar
+                    </button>
+        
+                    <form method="POST" action="{{ url_for('deletarProduto', codproduto=produto.codproduto) }}" onsubmit="return confirm('Tem certeza que deseja deletar este produto?')">
+                        <button type="submit" class="btn-acao delete">
+                            <i class="fa-solid fa-trash"></i> Deletar
+                        </button>
+                    </form>
+                </div>
             </div>
             {% endfor %}
-        </div>        
+        </div>             
     </section>
     {% else %}
     <!-- HERO só aparece para usuários não fornecedores -->
@@ -167,9 +180,6 @@ function clickMenu() {
     
 
     <section id="sobre-loja">
-        <div class="sobre-imagem-grande">
-            <img src="{{ url_for('static', filename='img/jess1.png') }}" alt="Dona da Jess Empadas">
-        </div>
         <div class="sobre-conteudo">
             <h2>Como Surgimos?</h2>
             <p> A "Jess Empadas" começou em julho de 2023, no IFCM, onde vendi minhas primeiras empadas doces tradicionais. Mas, a história desse sonho começou bem antes. Desde muito nova, eu era apaixonada por fazer doces. Com 14 anos esse desejo plantou-se em meu coração mas, acabei deixando-o de lado... O desejo de ter uma renda fazendo algo que amava crescia, mas a insegurança e o medo me impediam, mesmo com o apoio da minha família.</p>
@@ -200,7 +210,7 @@ function clickMenu() {
             <div>
                 <h3 class="title">Contato</h3>
                 <p class="info">Delivery e Eventos:</p>
-                <p class="info">(84) 98859-6694</p>
+                <p class="info">(XX) XXXXX-XXXX</p>
             </div>
             <div id="ig">
                 <div id="simbIG">
@@ -216,7 +226,7 @@ function clickMenu() {
 </footer>
 
 <!-- MODAL PRODUTO -->
-<div class="modal-overlay" id="productModal">
+<div class="modal-overlay" id="productModal" style="display:none;">
     <div class="modal" role="document">
         <div class="modal-header">
             <h2 class="modal-title">Produto</h2>
@@ -231,7 +241,7 @@ function clickMenu() {
                 <hr>
                 <ul class="modal-desc"></ul>
                 <p class="modal-price"></p>
-                <form action="{{ url_for('carrinho') }}" method="POST" class="modal-cart">
+                <form id="modalCartForm" action="{{ url_for('carrinho_adicionar') }}" method="POST" class="modal-cart">
                     <input type="hidden" name="produto_id" value="">
                     <button type="submit" class="btn-add-cart">
                         <i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho
@@ -242,79 +252,223 @@ function clickMenu() {
     </div>
 </div>
 
-<script>
+
+<!-- MODAL EDIÇÃO DE PRODUTO -->
+<div id="modalEditar" class="modal-editar">
+    <div class="modal-editar-content">
+        <span class="modal-editar-fechar" onclick="fecharModalEditar()">&times;</span>
+        <h2>Editar Produto</h2>
+        <form id="formEditar" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="codproduto" id="editCodproduto">
+    
+            <label>Nome:</label>
+            <input type="text" name="nome" id="editNome" required>
+    
+            <label>Descrição:</label>
+            <textarea name="descricao" id="editDescricao" required></textarea>
+    
+            <label>Preço:</label>
+            <input type="number" step="0.01" name="valor" id="editValor" required>
+    
+            <label>Validade:</label>
+            <input type="date" name="vencimento" id="editValidade" required>
+    
+            <label>Quantidade:</label>
+            <input type="number" name="quantidade" id="editQuantidade" required>
+    
+            <label>Categoria:</label>
+            <input type="text" name="categoria" id="editCategoria" required>
+    
+            <label>Imagem:</label>
+            <input type="file" name="img">
+    
+            <button type="submit" class="btn-salvar">Salvar Alterações</button>
+        </form>
+    </div>
+</div>
+
+<script> // abrir modal produto e add produtos ao carrinho
     document.addEventListener('DOMContentLoaded', function () {
-        const overlay   = document.getElementById('productModal'); 
-        const modal     = overlay.querySelector('.modal');
-        const closeBtn  = overlay.querySelector('.modal-close');
-        const titleEl   = overlay.querySelector('.modal-title');
-        const nameEl    = overlay.querySelector('.modal-name');
-        const imgEl     = overlay.querySelector('.modal-img');
-        const descEl    = overlay.querySelector('.modal-desc');
-        const priceEl   = overlay.querySelector('.modal-price');
-        const cartForm  = overlay.querySelector('.modal-cart');
-        const idInput   = cartForm.querySelector('input[name="produto_id"]');
-    
-        function parseDesc(raw) {
-            if (!raw) return [];
-            try {
-                const j = JSON.parse(raw);
-                if (Array.isArray(j)) return j;
-            } catch(e){}
-            return String(raw).split('||').map(s => s.trim()).filter(Boolean);
-        }
-    
-        function openModal(data){
-            const { id='', name='Produto', image='', price='', desc='' } = data;
-            titleEl.textContent = 'Detalhes do Produto';
-            nameEl.textContent  = name;
-            imgEl.src           = image || '';
-            imgEl.alt           = name;
-    
-            descEl.innerHTML = '';
-            const itens = parseDesc(desc);
-            if (itens.length){
-                itens.forEach(t => {
-                    const li = document.createElement('li');
-                    li.textContent = t;
-                    descEl.appendChild(li);
-                });
-            }
-    
-            priceEl.textContent = price ? `R$ ${price}` : '';
-            idInput.value       = id || '';
-    
-            overlay.style.display = 'flex'; 
-            overlay.setAttribute('aria-hidden', 'false');
-            closeBtn.focus();
-        }
-    
-        function closeModal(){
-            overlay.style.display = 'none';
-            overlay.setAttribute('aria-hidden', 'true');
-        }
-    
-        closeBtn.addEventListener('click', closeModal);
-        overlay.addEventListener('click', (e) => { 
-            if (e.target === overlay) closeModal(); 
+    const overlay   = document.getElementById('productModal'); 
+    const closeBtn  = overlay.querySelector('.modal-close');
+    const titleEl   = overlay.querySelector('.modal-title');
+    const nameEl    = overlay.querySelector('.modal-name');
+    const imgEl     = overlay.querySelector('.modal-img');
+    const descEl    = overlay.querySelector('.modal-desc');
+    const priceEl   = overlay.querySelector('.modal-price');
+    const cartForm  = document.getElementById('modalCartForm');
+    const idInput   = cartForm.querySelector('input[name="produto_id"]');
+
+    // converte string de descrição em array
+    function parseDesc(raw) {
+        if (!raw) return [];
+        try {
+            const j = JSON.parse(raw);
+            if (Array.isArray(j)) return j;
+        } catch(e){}
+        return String(raw).split('||').map(s => s.trim()).filter(Boolean);
+    }
+
+    function openModal(data){
+        const { id='', name='Produto', image='', price='', desc='' } = data;
+        titleEl.textContent = 'Detalhes do Produto';
+        nameEl.textContent  = name;
+        imgEl.src           = image || '';
+        imgEl.alt           = name;
+
+        descEl.innerHTML = '';
+        parseDesc(desc).forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            descEl.appendChild(li);
         });
-        document.addEventListener('keydown', (e) => { 
-            if (e.key === 'Escape') closeModal(); 
-        });
-    
-        document.querySelectorAll('[data-product]').forEach(el => {
-            el.addEventListener('click', function (ev) {
-                ev.preventDefault();
-                const d = this.dataset;
-                openModal({
-                    id: d.id || '',
-                    name: d.name || (this.querySelector('.nomeP, h3')?.textContent?.trim() || 'Produto'),
-                    image: d.image || (this.querySelector('img')?.src || ''),
-                    price: d.price || '',
-                    desc: d.desc || ''
-                });
+
+        priceEl.textContent = price ? `R$ ${price}` : '';
+        idInput.value = id;
+
+        overlay.style.display = 'flex'; 
+        overlay.setAttribute('aria-hidden', 'false');
+        closeBtn.focus();
+    }
+
+    function closeModal(){
+        overlay.style.display = 'none';
+        overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // abre modal ao clicar em produtos
+    document.querySelectorAll('[data-product]').forEach(el => {
+        el.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            const d = this.dataset;
+            openModal({
+                id: d.id || '',
+                name: d.name || (this.querySelector('h3')?.textContent?.trim() || 'Produto'),
+                image: d.image || (this.querySelector('img')?.src || ''),
+                price: d.price || '',
+                desc: d.desc || ''
             });
         });
+    });
+
+    // AJAX para adicionar ao carrinho
+    cartForm.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        const produtoId = idInput.value;
+        if (!produtoId) {
+            alert('Produto inválido!');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('produto_id', produtoId);
+
+        fetch(cartForm.action, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                closeModal();
+            } else {
+                alert(data.error || 'Erro ao adicionar ao carrinho.');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Erro ao adicionar ao carrinho.');
+        });
+    });
+});
+
+</script>
+    
+
+<script> // abrir modal edição de produtos
+    document.addEventListener('DOMContentLoaded', function () {
+      const modalEditar = document.getElementById('modalEditar');
+      const formEditar  = document.getElementById('formEditar');
+      const btnFechar   = document.querySelector('.modal-editar-fechar');
+      const btnSalvar   = formEditar.querySelector('.btn-salvar');
+    
+      const fCod   = document.getElementById('editCodproduto');
+      const fNome  = document.getElementById('editNome');
+      const fDesc  = document.getElementById('editDescricao');
+      const fValor = document.getElementById('editValor');
+      const fVal   = document.getElementById('editValidade');
+      const fQtd   = document.getElementById('editQuantidade');
+      const fCat   = document.getElementById('editCategoria');
+    
+      // dd/mm/aaaa -> aaaa-mm-dd (p/ <input type="date">)
+      function brToISO(dataBR) {
+        if (!dataBR) return '';
+        const [dd, mm, yyyy] = String(dataBR).split('/');
+        if (!yyyy) return '';
+        return `${yyyy}-${String(mm).padStart(2,'0')}-${String(dd).padStart(2,'0')}`;
+      }
+    
+      // normaliza num com vírgula para ponto (caso seja "12,50")
+      function toNumberString(v) {
+        if (v === null || v === undefined) return '';
+        return String(v).replace(',', '.');
+      }
+    
+      // monta a url de edição dinamicamente
+      const EDIT_URL_TEMPLATE = "{{ url_for('editarProduto', codproduto='CODPLACEHOLDER') }}";
+    
+      window.abrirModalEditar = function (codproduto, nome, descricao, valor, validade, quantidade, categoria) {
+        // Preenche campos
+        fCod.value   = codproduto || '';
+        fNome.value  = nome || '';
+        fDesc.value  = descricao || '';
+        fValor.value = toNumberString(valor) || '';
+        fVal.value   = brToISO(validade || '');
+        fQtd.value   = quantidade || '';
+        fCat.value   = categoria || '';
+    
+        formEditar.action = EDIT_URL_TEMPLATE.replace('CODPLACEHOLDER', encodeURIComponent(codproduto || ''));
+    
+        // exibe modal
+        modalEditar.style.display = 'flex'; 
+        modalEditar.setAttribute('aria-hidden', 'false');
+        btnSalvar.disabled = false;
+      };
+    
+      window.fecharModalEditar = function () {
+        modalEditar.style.display = 'none';
+        modalEditar.setAttribute('aria-hidden', 'true');
+      };
+    
+      // fechar ao clicar fora
+      modalEditar.addEventListener('click', (e) => {
+        if (e.target === modalEditar) window.fecharModalEditar();
+      });
+    
+      // fechar com x
+      btnFechar.addEventListener('click', window.fecharModalEditar);
+    
+      // fechar com esc
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') window.fecharModalEditar();
+      });
+    
+      // evita duplo submit 
+      formEditar.addEventListener('submit', function () {
+        btnSalvar.disabled = true;
+        const original = btnSalvar.textContent;
+        btnSalvar.textContent = 'Salvando...';
+        setTimeout(() => {
+          btnSalvar.disabled = false;
+          btnSalvar.textContent = original;
+        }, 5000);
+      });
     });
 </script>
     

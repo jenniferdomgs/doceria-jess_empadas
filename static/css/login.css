@@ -1,210 +1,42 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* {margin: 0;padding: 0;box-sizing: border-box;}
 
-@font-face {
-    font-family: "montserrat";
-    src: url(./fontes/Montserrat-Bold.otf);
-}
+@font-face {font-family: "montserrat";src: url(./fontes/Montserrat-Bold.otf);}
 
-body { 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #FFEFC6;
-    font-family: "montserrat";
-}
+body {display: flex;justify-content: center;align-items: center;min-height: 100vh;background-color: #FFEFC6;font-family: "montserrat";}
 
-.containerL {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 1300px;
-    height: 700px;
-    padding: 20px;
-}
+.containerL {display: flex;justify-content: center;align-items: center;width: 100%;max-width: 1300px;height: 700px;padding: 20px;}
 
-.login {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    align-items: center;
-    justify-content: center;
-    width: 400px;
-    height: 630px;
-    background-color: #FFDDA7;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    padding: 20px;
-}
+.login {display: flex;flex-direction: column;gap: 30px;align-items: center;justify-content: center;width: 400px;height: 630px;background-color: #FFDDA7;border-radius: 20px;box-shadow: 0 0 20px rgba(0,0,0,0.2);padding: 20px;}
 
-.login img {
-    width: 100%;
-}
+.login img {width: 100%;}
 
-.form-login {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 335px;
-}
+.form-login {display: flex;flex-direction: column;gap: 20px;width: 335px;}
 
-fieldset {
-    display: flex;
-    flex-direction: column;
-    border: none;
-    gap: 10px;
-}
+fieldset {display: flex;flex-direction: column;border: none;gap: 10px;}
 
-label {
-    color: #00000090;
-}
+label {color: #00000090;}
 
-input {
-    border-radius: 8px;
-    background-color: #FFEFC6;
-    width: 100%;
-    height: 45px;
-    text-align: center;
-    border: 1px solid #AD6336;
-}
+input {border-radius: 8px;background-color: #FFEFC6;width: 100%;height: 45px;text-align: center;border: 1px solid #AD6336;}
 
-.entrar {
-    width: 100%;
-    height: 45px;
-    background-color: #AD6336;
-    color: #FFDDA7;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 10px;
-}
+.entrar {width: 100%;height: 45px;background-color: #AD6336;color: #FFDDA7;border: none;border-radius: 8px;cursor: pointer;margin-top: 10px;}
 
-.entrar:hover {
-    background-color: #FFDDA7;
-    color: #AD6336;
-    border: 1px solid #AD6336;
-    transition: 0.5s;
-}
+.entrar:hover {background-color: #FFDDA7;color: #AD6336;border: 1px solid #AD6336;transition: 0.5s;}
 
-.loginB {
-    width: 100%;
-    height: 45px;
-    background-color: #FFDDA7;
-    border: none;
-    color: #AD6336;
-    cursor: pointer;
-}
+.loginB {width: 100%;height: 45px;background-color: #FFDDA7;border: none;color: #AD6336;cursor: pointer;}
 
-.homeButton {
-    width: 45px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #AD6336;
-    border: none;
-    background-color: #FFDDA7;
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-}
+.homeButton {width: 45px;height: 30px;display: flex;align-items: center;justify-content: center;color: #AD6336;border: none;background-color: #FFDDA7;cursor: pointer;position: absolute;top: 20px;left: 20px;}
 
-.homeButton > i {
-    font-size: 25px;
-}
+.homeButton > i {font-size: 25px;}
 
-.homeButton:hover {
-    opacity: 0.5;
-}
+.homeButton:hover {opacity: 0.5;}
 
-button {
-    display: flex;
-    width: 100%;
-    height: 45px;
-    background-color: #AD6336;
-    color: #FFDDA7;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-}
+button {display: flex;width: 100%;height: 45px;background-color: #AD6336;color: #FFDDA7;border: none;border-radius: 8px;cursor: pointer;align-items: center;justify-content: center;}
 
-#s {
-    padding-top: 10px;
-}
+#s {padding-top: 10px;}
 
-#loginM {
-    display: none;
-}
+#loginM {display: none;}
 
-#cdst {
-    text-decoration: none;
-    color: #AD6336;
-}
+#cdst {text-decoration: none;color: #AD6336;}
 
-
-
-@media screen and (max-width: 768px) {
-    .containerL {
-        width: 100%;
-        height: auto;
-        background-image: none;
-    }
-
-    .login {
-        width: 410px;
-        height: auto;
-        padding: 20px;
-        background-color: #AD6336;
-        border-radius: 30px;
-    }
-    
-    .login img {
-        width: 400px;
-    }
-
-    #loginM {
-        display: block;
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
-    label {
-        color: #FFDDA7;
-    }
-
-    .loginB {
-        background-color: #AD6336;
-        color: #FFDDA7;
-    }
-
-    .entrar {
-        background-color: #FFDDA7;
-        color: #AD6336;
-    }
-
-    .entrar:hover {
-        background-color: #AD6336;
-        color: #FFDDA7;
-        border: 1px solid #FFDDA7;
-    }
-
-    .homeButton {
-        width: 40px;
-        height: 30px;
-        position: absolute;
-        top: 20px;
-        left: 20px;
-    }
-
-    .homeButton > i {
-        font-size: 30px;
-    }
+@media screen and (max-width: 768px) {.containerL {width: 100%;height: auto;background-image: none;}.login {width: 410px;height: auto;padding: 20px;background-color: #AD6336;border-radius: 30px;}.login img {width: 400px;}#loginM {display: block;width: 100%;margin-bottom: 20px;}label {color: #FFDDA7;}.loginB {background-color: #AD6336;color: #FFDDA7;}.entrar {background-color: #FFDDA7;color: #AD6336;}.entrar:hover {background-color: #AD6336;color: #FFDDA7;border: 1px solid #FFDDA7;}.homeButton {width: 40px;height: 30px;position: absolute;top: 20px;left: 20px;}.homeButton > i {font-size: 30px;}
 }

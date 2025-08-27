@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, flash, abort
+from flask import Flask, render_template, request, url_for, redirect, flash, abort, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from models import User
 import psycopg2
@@ -11,6 +11,7 @@ from urllib.parse import urlparse, urljoin
 app = Flask(__name__, static_folder='static')
 
 app.secret_key = os.getenv('SECRET_KEY', 'U2T4C6')  
+
 
 login_manager = LoginManager()
 login_manager.login_view = 'login'
@@ -120,18 +121,22 @@ def home():
     doces = [p for p in produtos if p['categoria'].lower() == 'doces']
     salgados = [p for p in produtos if p['categoria'].lower() == 'salgados']
 
+    cursor.execute("SELECT nome FROM categoria")
+    categorias = [row[0] for row in cursor.fetchall()]
+
     cursor.close()
     connection.close()
 
     tipo_usuario = current_user.user_type if current_user.is_authenticated else None  
 
     return render_template('home.html', 
-                           produtos=produtos, 
-                           tipo_usuario=tipo_usuario, 
-                           termo_pesquisa=termo,
-                           mais_vendidos=mais_vendidos,
-                           doces=doces,
-                           salgados=salgados)
+                       produtos=produtos, 
+                       tipo_usuario=tipo_usuario, 
+                       termo_pesquisa=termo,
+                       mais_vendidos=mais_vendidos,
+                       doces=doces,
+                       salgados=salgados,
+                       categorias=categorias)
 
 
 @app.route('/produto/<string:id>', methods=['GET'])
@@ -166,10 +171,66 @@ def produto_detalhes(id):
     return render_template('produto.html', produto=produto)
 
 
-@app.route('/carrinho', methods=['POST'])
+@app.route('/carrinho/adicionar', methods=['POST'])
 @login_required
-def carrinho():
-    return render_template('carrinho.html')
+def carrinho_adicionar():
+    produto_id = request.form.get('produto_id')
+    if not produto_id or not current_user.is_authenticated:
+        return jsonify(success=False, error="Usuário ou produto inválido")
+
+    connection = conexaodb()
+    if connection is None:
+        return jsonify({"success": False, "error": "Erro ao conectar ao banco de dados."})
+
+    cursor = connection.cursor()
+    try:
+        cursor.execute("SELECT quantidade FROM carrinho WHERE cpfUsuario=%s AND codProduto=%s", 
+                       (current_user.id, produto_id))
+        item = cursor.fetchone()
+        if item:
+            nova_qtd = item[0] + 1
+            cursor.execute("UPDATE carrinho SET quantidade=%s WHERE cpfUsuario=%s AND codProduto=%s",
+                           (nova_qtd, current_user.id, produto_id))
+        else:
+            cursor.execute("INSERT INTO carrinho (cpfUsuario, codProduto, quantidade, codCompra) VALUES (%s, %s, %s, %s)",
+                           (current_user.id, produto_id, 1, 1))  
+
+        connection.commit()
+        return jsonify(success=True, message="Produto adicionado ao carrinho!")
+    except Exception as e:
+        connection.rollback()
+        print("Erro ao adicionar ao carrinho:", e)
+        return jsonify(success=False, error="Erro ao adicionar ao carrinho.")
+    finally:
+        cursor.close()
+        connection.close()
+
+@app.route('/carrinho', methods=['GET', 'POST'])
+@login_required
+def carrinho_ver():
+    connection = conexaodb()
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT p.codproduto, p.nome, p.valor, i.urlImagem, c.quantidade
+        FROM carrinho c
+        JOIN produto p ON p.codproduto = c.codProduto
+        LEFT JOIN imagem i ON i.codProduto = p.codproduto
+        WHERE c.cpfUsuario = %s
+    """, (current_user.id,))
+
+    carrinho = cursor.fetchall()
+    # converter para dicionário
+    lista_carrinho = []
+    for c in carrinho:
+        lista_carrinho.append({
+            'codproduto': c[0],
+            'nome': c[1],
+            'valor': float(c[2]),
+            'imagem': c[3],
+            'quantidade': c[4]
+        })
+    return render_template('carrinho.html', carrinho=lista_carrinho)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -177,10 +238,7 @@ def login():
         login_data = request.form.get('login')
         senha = request.form.get('senha')
 
-        if login_data.isdigit() is False:
-            login_data_normalizado = ''.join(filter(str.isdigit, login_data))
-        else:
-            login_data_normalizado = login_data
+        login_data_normalizado = ''.join(filter(str.isdigit, login_data))
 
         connection = conexaodb()
         if connection is None:
@@ -226,7 +284,7 @@ def login():
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
     if request.method == 'POST':
-        cpf = request.form.get('cpf')
+        cpf = ''.join(filter(str.isdigit, request.form.get('cpf')))
         nome = request.form.get('nome')
         email = request.form.get('email')
         telefone = request.form.get('telefone')
@@ -257,7 +315,7 @@ def cadastroFornecedor():
         return "Acesso negado.", 403
     
     if request.method == 'POST':
-        cnpj = request.form.get('cnpj')
+        cnpj = ''.join(filter(str.isdigit, request.form.get('cnpj')))
         nome = request.form.get('nome')
         email = request.form.get('email')
         telefone = request.form.get('telefone')
@@ -334,6 +392,79 @@ def cadastroProduto():
         finally:
             cursor.close()
             connection.close()
+
+@app.route('/produto/<string:codproduto>/editar', methods=['POST'])
+@login_required
+def editarProduto(codproduto):
+    if current_user.user_type != 'fornecedor':
+        return "Acesso negado.", 403
+
+    connection = conexaodb()
+    cursor = connection.cursor()
+
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        descricao = request.form.get('descricao')
+        valor = request.form.get('valor')
+        vencimento = request.form.get('vencimento')
+        quantidade = request.form.get('quantidade')
+        categoria = request.form.get('categoria')
+        img = request.files.get('img')
+
+        try:
+            cursor.execute("""
+                UPDATE produto
+                SET nome = %s, descricao = %s, valor = %s, vencimento = %s, quantidade = %s, nomeCategoria = %s
+                WHERE codproduto = %s AND cnpjFornecedor = %s
+            """, (nome, descricao, valor, vencimento, quantidade, categoria, codproduto, current_user.id))
+
+            if img and img.filename:
+                extensao = img.filename.rsplit('.', 1)[1]
+                url = f'static/img/{codproduto}.{extensao}'
+                img.save(url)
+
+                cursor.execute("""
+                    UPDATE imagem SET urlImagem = %s WHERE codProduto = %s
+                """, (url, codproduto))
+
+            connection.commit()
+            flash("Produto atualizado com sucesso!", "success")
+            return redirect(url_for('home'))
+
+        except Exception as e:
+            connection.rollback()
+            print("Erro ao atualizar:", e)
+            return "Erro ao atualizar o produto!", 400
+
+        finally:
+            cursor.close()
+            connection.close()
+
+
+@app.route('/produto/<string:codproduto>/delete', methods=['POST'])
+@login_required
+def deletarProduto(codproduto):
+    if current_user.user_type != 'fornecedor':
+        return "Acesso negado.", 403
+
+    connection = conexaodb()
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute("DELETE FROM imagem WHERE codProduto = %s", (codproduto,))
+        cursor.execute("DELETE FROM produto WHERE codproduto = %s AND cnpjFornecedor = %s", (codproduto, current_user.id))
+        connection.commit()
+        flash("Produto deletado com sucesso!", "success")
+        return redirect(url_for('home'))
+
+    except Exception as e:
+        connection.rollback()
+        print("Erro ao deletar:", e)
+        return "Erro ao deletar o produto!", 400
+
+    finally:
+        cursor.close()
+        connection.close()
 
 @app.route('/pesquisar', methods=['GET'])
 def pesquisar():

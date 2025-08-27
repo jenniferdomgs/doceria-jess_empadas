@@ -14,31 +14,27 @@
       <h2>Seu Carrinho</h2>
   
       <ul class="cart-list">
-        <!-- Item 1 no carrinho -->
+        {% for item in carrinho %}
         <li>
-          <input type="checkbox" id="product1" name="product1">
-
-          <div class="product-details">
-            <div class="img-produto">
-                <img src="" alt="imagem do produto">
-            </div>
-
+            <div class="product-details">
+                <div class="img-produto">
+                    <img src="{{ url_for('static', filename=item.imagem.split('static/')[-1]) }}" alt="{{ item.nome }}">
+                </div>
                 <div class="info">
-              <p class="p-infos">Nome do Produto</p>
-              <p class="p-infos">Valor: R$</p>
-              <p class="p-infos">Quantidade:</p>
+                    <p class="p-infos">{{ item.nome }}</p>
+                    <p class="p-infos">Valor: R$ {{ '%.2f'|format(item.valor) }}</p>
+                    <p class="p-infos">Quantidade: {{ item.quantidade }}</p>
+                </div>
             </div>
-          </div>
-
         </li>
-
-
+        {% endfor %}
       </ul>
+    
       <hr>
       
       <div class="cart-summary">
         <p class="p-total">Subtotal: R$</p>
-        <p class="p-total">Total: R$</p>
+        <p class="p-total">Subtotal: R$ {{ carrinho|sum(attribute='valor') }}</p>
         <button class="choose-payment-btn">Escolher Forma de Pagamento</button>
       </div>
     </div>
