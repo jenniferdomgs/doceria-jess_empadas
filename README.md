@@ -1,16 +1,15 @@
-# 🛒 E-commerce | Jess Empadas
-
 > **Status:** Developing ⚠️  
 
-O **Jess Empadas** é um e-commerce de doceria desenvolvido com **Python (Flask)**, **PostgreSQL** e **Docker**.  
-O sistema já conta com **carrinho de compras**, **cadastro/login de usuários e fornecedores**, **painel administrativo para fornecedores** e **senhas criptografadas**.  
-O próximo passo é implementar a **finalização da compra**.
+# 🛒 E-commerce | Jess Empadas
+
+Trata-se de um e-commerce criado para trazer o sabor da doceria para o ambiente digital!
+O que já dá para fazer no Jess Empadas? Clientes podem explorar produtos, montar seu carrinho e realizar cadastro e login. Já fornecedores têm um painel exclusivo para gerenciar seus produtos. 
 
 ---
 
 ## 📌 Funcionalidades
 
-### ✅ Implementadas
+### Implementadas
 - Cadastro de **usuário** e **fornecedor**
 - Login com **criptografia de senha**
 - **Carrinho de compras** funcional
@@ -19,7 +18,7 @@ O próximo passo é implementar a **finalização da compra**.
 - Estrutura de banco de dados PostgreSQL
 - Containerização com Docker
 
-### 🔜 Em desenvolvimento
+### Em desenvolvimento
 - **Finalização da compra**
 
 ---
@@ -31,13 +30,6 @@ Antes de começar, você precisa ter instalado em sua máquina:
 - [Docker Compose](https://docs.docker.com/compose/)  
 
 ---
-
-## Requisitos
-
-Pré-requisitos:
-
-- [Docker](https://www.docker.com/products/docker-desktop/)
-
 
 ## Como Executar
 
