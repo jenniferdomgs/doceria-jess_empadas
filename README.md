@@ -33,7 +33,7 @@ Antes de começar, você precisa ter instalado em sua máquina:
 
 ---
 
-## Como Executar
+## 🚀 Como Executar
 
 ### No Windows
 
