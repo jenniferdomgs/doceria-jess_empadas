@@ -2,6 +2,8 @@
 
 # 🛒 E-commerce | Jess Empadas
 
+<img width="1355" height="580" alt="homeDesktop" src="https://github.com/user-attachments/assets/5aa7385b-3ab2-435b-ab1d-00c9a77381ea" />
+
 Trata-se de um e-commerce criado para trazer o sabor da doceria para o ambiente digital!
 O que já dá para fazer no Jess Empadas? Clientes podem explorar produtos, montar seu carrinho e realizar cadastro e login. Já fornecedores têm um painel exclusivo para gerenciar seus produtos. 
 
@@ -56,4 +58,14 @@ A aplicação estará disponível em:
 
 ## Autora
 - **[Jennifer Domingos](https://github.com/jenniferdomgs)**
+## 👩‍💻 Autoria & Contribuições
+
+Este projeto foi iniciado em 2023 como parte das disciplinas Programação com Acesso a Banco de Dados e Autoria Web, no curso Técnico em Informática do IFRN.
+Foi desenvolvido inicialmente em parceria com colegas de turma, mas acabou ficando inativo.
+Resolvi retomá-lo e seguir com o desenvolvimento, trazendo novas funcionalidades e melhorias.
+
+- **[Jennifer Domingos](https://github.com/jenniferdomgs)**  
+- **[Jessica Nascimento](https://github.com/jess3008)**
+- **[Abne Santos](https://github.com/abnesantos)**
+- **[Raul Cruz](https://github.com/raulzinho123)**  
 
